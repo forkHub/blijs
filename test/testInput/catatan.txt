@@ -1,0 +1,3 @@
+test input global
+test input global per input
+test input key double input
