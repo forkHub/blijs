@@ -164,8 +164,20 @@ const TileImage = (img: IBuffer, x: number = 0, y: number = 0, frame: number = 0
 	let w2: number = Math.floor(img.frameW * img.scaleX);
 	let h2: number = Math.floor(img.frameH * img.scaleY);
 
+	while (x < 0) {
+		x += w2;
+	}
+
+	while (y < 0) {
+		y += h2;
+	}
+
 	x = Math.floor(Math.abs(x));
 	y = Math.floor(Math.abs(y));
+
+	x -= w2;
+	y -= h2;
+
 	frame = Math.floor(frame);
 
 	jmlH = Math.ceil((ha.blitz.blWindow.canvasAktif.width + x) / w2);
