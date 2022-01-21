@@ -435,14 +435,20 @@ const TileImage = (img, x = 0, y = 0, frame = 0) => {
     let jmlV = 0;
     let w2 = Math.floor(img.frameW * img.scaleX);
     let h2 = Math.floor(img.frameH * img.scaleY);
-    x = Math.floor(Math.abs(x));
-    y = Math.floor(Math.abs(y));
+    while (x < 0) {
+        x += w2;
+    }
+    while (y < 0) {
+        y += h2;
+    }
+    x -= w2;
+    y -= h2;
     frame = Math.floor(frame);
-    jmlH = Math.ceil((ha.blitz.blWindow.canvasAktif.width + x) / w2);
-    jmlV = Math.ceil((ha.blitz.blWindow.canvasAktif.height + y) / h2);
+    jmlH = Math.ceil((ha.blitz.blWindow.canvasAktif.width + Math.abs(x)) / w2);
+    jmlV = Math.ceil((ha.blitz.blWindow.canvasAktif.height + Math.abs(y)) / h2);
     for (let i = 0; i < jmlH; i++) {
         for (let j = 0; j < jmlV; j++) {
-            DrawImage(img, -x + (i * w2), -y + (j * h2), frame);
+            DrawImage(img, x + (i * w2), y + (j * h2), frame);
         }
     }
 };
@@ -1292,19 +1298,27 @@ var ha;
             this.RAD2DEG = 180.0 / Math.PI;
             this.DEG2RAD = Math.PI / 180.0;
         }
+        clamp(n, m) {
+            let m2 = Math.abs(m);
+            let n2 = Math.abs(n);
+            let h = Math.min(n2, m2);
+            if (n >= 0)
+                return h;
+            return -h;
+        }
         equal(n1, n2, tol = 1) {
             if (Math.abs(n1 - n2) <= tol)
                 return true;
             return false;
         }
         quadDeg(x, y) {
-            console.log('quad x: ' + x + '/y: ' + y);
+            // console.log('quad x: ' + x + '/y: ' + y);
             if (x == 0) {
                 if (y >= 0) {
                     return 0;
                 }
                 else {
-                    return 180;
+                    return 0;
                 }
             }
             else if (x > 0) {
@@ -1312,15 +1326,18 @@ var ha;
                     return 0;
                 }
                 else {
-                    return 270;
+                    return 0;
                 }
             }
             else if (x < 0) {
                 if (y > 0) {
                     return 90;
                 }
-                else {
+                else if (y == 0) {
                     return 180;
+                }
+                else {
+                    return -90;
                 }
             }
             else {
@@ -1333,52 +1350,59 @@ var ha;
             let s;
             l = Math.sqrt(x * x + y * y);
             if (l == 0) {
-                l = .001;
+                l = .00001;
             }
             s = y / l;
             s = Math.asin(s);
             s *= this.RAD2DEG;
-            s = Math.abs(s) + ha.trans.quadDeg(x, y);
+            s = s + ha.trans.quadDeg(x, y);
             s = this.normalizeDeg(s);
             return s;
         }
         normalizeDeg(deg) {
-            console.log('normalize anggle, input: ' + deg);
-            while (deg > 360) {
+            // console.log('normalize anggle, input: ' + deg);
+            while (deg >= 360) {
                 deg -= 360;
             }
-            while (deg < -360) {
+            while (deg <= -360) {
                 deg += 360;
             }
             if (deg < 0)
-                deg = 360 - deg;
-            console.log('normalize anggle, output: ' + deg);
+                deg = 360 + deg;
+            // console.log('normalize anggle, output: ' + deg);
             return deg;
         }
         angleMaxDist(angleS = 0, angleT) {
             angleS = this.normalizeDeg(angleS);
             angleT = this.normalizeDeg(angleT);
-            if (angleT > angleS) {
-                if (angleT - angleS > 180) {
-                    return angleT - angleS;
-                }
-                else {
-                    return -(angleS + 360 - angleT);
-                }
+            let deg = this.angleMinDist(angleS, angleT);
+            if (deg >= 0) {
+                return -(360 - deg);
             }
             else {
-                if (angleS - angleT > 180) {
-                    return angleT - angleS;
-                }
-                else {
-                    return 360 + angleT - angleS;
-                }
+                return (360 - Math.abs(deg));
             }
+            // if (angleT > angleS) {
+            // 	if (angleT - angleS > 180) {
+            // 		return angleT - angleS;
+            // 	}
+            // 	else {
+            // 		return -(angleS + 360 - angleT);
+            // 	}
+            // }
+            // else {
+            // 	if (angleS - angleT > 180) {
+            // 		return angleT - angleS;
+            // 	}
+            // 	else {
+            // 		return 360 + angleT - angleS;
+            // 	}
+            // }
         }
         angleMinDist(angleS = 0, angleT) {
             angleS = this.normalizeDeg(angleS);
             angleT = this.normalizeDeg(angleT);
-            if (angleT > angleS) {
+            if (angleT >= angleS) {
                 if (angleT - angleS > 180) {
                     return -(angleS + 360 - angleT);
                 }
@@ -1387,7 +1411,7 @@ var ha;
                 }
             }
             else {
-                if (angleS - angleT > 180) {
+                if (angleS - angleT >= 180) {
                     return 360 + angleT - angleS;
                 }
                 else {
@@ -1395,56 +1419,39 @@ var ha;
                 }
             }
         }
-        moveTo(x, y, xt, yt, speed) {
+        moveTo(x, y, xt, yt, v) {
             let pjx = xt - x;
             let pjy = yt - y;
-            let pj = Math.sqrt(pjx * pjx + pjy * pjy);
-            let perb = speed / pj;
+            let pj = this.dist(x, y, xt, yt);
+            let perb = Math.abs(v) / pj;
             return {
                 x: perb * pjx,
                 y: perb * pjy
             };
         }
-        moveFrom(x, y, xt, yt, speed) {
+        moveFrom(x = 0, y = 0, xt = 0, yt = 0, v = 0) {
             let pjx = xt - x;
             let pjy = yt - y;
-            let pj = Math.sqrt(pjx * pjx + pjy * pjy);
-            let perb = speed / pj;
+            let pj = this.dist(x, y, xt, yt);
+            let perb = Math.abs(v) / pj;
             return {
-                x: perb * pjx,
-                y: perb * pjy
+                x: perb * -pjx,
+                y: perb * -pjy
             };
         }
-        rotateForm(x, y, tx, ty, rotNow, maxRot = 10) {
+        dist(x, y, xt, yt) {
+            let pjx = xt - x;
+            let pjy = yt - y;
+            return Math.sqrt(pjx * pjx + pjy * pjy);
+        }
+        rotateFrom(x, y, tx, ty, rotNow) {
             let angle = this.deg(tx - x, ty - y);
-            let angleMin = this.angleMaxDist(angle, rotNow);
-            maxRot = Math.abs(maxRot);
-            if (angleMin > 0) {
-                if (angleMin > maxRot) {
-                    return maxRot;
-                }
-            }
-            else if (angleMin < 0) {
-                if (angleMin < -maxRot) {
-                    return -maxRot;
-                }
-            }
+            let angleMin = this.angleMaxDist(rotNow, angle);
             return angleMin;
         }
-        rotateTo(x, y, tx = 0, ty = 0, rotNow = 0, maxRot = 10) {
+        rotateTo(x, y, tx = 0, ty = 0, rotNow = 0) {
             let angle = this.deg(tx - x, ty - y);
-            let angleMin = this.angleMinDist(angle, rotNow);
-            maxRot = Math.abs(maxRot);
-            if (angleMin > 0) {
-                if (angleMin > maxRot) {
-                    return maxRot;
-                }
-            }
-            else if (angleMin < 0) {
-                if (angleMin < -maxRot) {
-                    return -maxRot;
-                }
-            }
+            let angleMin = this.angleMinDist(rotNow, angle);
             return angleMin;
         }
         rotateRel(x = 0, y = 0, xt = 0, yt = 0, deg = 10) {
@@ -1461,7 +1468,7 @@ var ha;
             };
         }
         moveByDeg(speed = 10, deg = 10) {
-            deg = this.normalizeDeg(deg);
+            // deg = this.normalizeDeg(deg);
             deg *= this.DEG2RAD;
             return {
                 x: Math.cos(deg) * speed,

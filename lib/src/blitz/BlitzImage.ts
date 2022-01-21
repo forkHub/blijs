@@ -172,20 +172,17 @@ const TileImage = (img: IBuffer, x: number = 0, y: number = 0, frame: number = 0
 		y += h2;
 	}
 
-	x = Math.floor(Math.abs(x));
-	y = Math.floor(Math.abs(y));
-
 	x -= w2;
 	y -= h2;
 
 	frame = Math.floor(frame);
 
-	jmlH = Math.ceil((ha.blitz.blWindow.canvasAktif.width + x) / w2);
-	jmlV = Math.ceil((ha.blitz.blWindow.canvasAktif.height + y) / h2);
+	jmlH = Math.ceil((ha.blitz.blWindow.canvasAktif.width + Math.abs(x)) / w2);
+	jmlV = Math.ceil((ha.blitz.blWindow.canvasAktif.height + Math.abs(y)) / h2);
 
 	for (let i: number = 0; i < jmlH; i++) {
 		for (let j: number = 0; j < jmlV; j++) {
-			DrawImage(img, -x + (i * w2), -y + (j * h2), frame);
+			DrawImage(img, x + (i * w2), y + (j * h2), frame);
 		}
 	}
 }
