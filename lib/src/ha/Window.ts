@@ -38,7 +38,7 @@ namespace ha.blitz {
 		}
 
 		windowResize = (): void => {
-			console.debug('window on resize');
+			// console.debug('window on resize');
 			let canvas: HTMLCanvasElement = ha.blitz.blWindow._canvasAktif.canvas;
 
 			let cp = ha.blitz.blWindow._canvasAktif.canvas.width;
@@ -61,7 +61,7 @@ namespace ha.blitz {
 			canvas.style.top = ((wl - cl2) / 2) + 'px';
 			canvas.style.left = ((wp - cp2) / 2) + 'px';
 
-			console.debug('canvas w: ' + canvas.style.width + '/ratio: ' + ratio);
+			// console.debug('canvas w: ' + canvas.style.width + '/ratio: ' + ratio);
 		}
 
 		loop = async (): Promise<void> => {

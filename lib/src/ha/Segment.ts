@@ -18,7 +18,7 @@ namespace ha {
 			if (!ha.segment.crossHor(seg)) return null;
 
 			let seg2: ISegment = ha.segment.getUpSeg(seg);
-			let perbV: number = (ha.segment.vecJ(seg2)) / seg2.v2.y;
+			let perbV: number = seg2.v2.y / (ha.segment.vecJ(seg2));
 			let x: number;
 
 			x = seg2.v2.x + (perbV * ha.segment.vecI(seg2));
@@ -62,6 +62,12 @@ namespace ha {
 			}
 		}
 
+		length(seg: ISegment): number {
+			let x: number = this.vecI(seg);
+			let y: number = this.vecJ(seg);
+			return Math.sqrt(x * x + y * y);
+		}
+
 		vecI(seg: ISegment): number {
 			return seg.v2.x - seg.v1.x;
 		}
@@ -80,6 +86,23 @@ namespace ha {
 				seg.v2.y - seg.v1.y,
 				seg.v2.y - seg.v1.y
 			);
+		}
+
+		scale(seg: ISegment, scale: number): void {
+			let px: number = seg.v2.x - seg.v1.x;
+			let py: number = seg.v2.y - seg.v1.y;
+
+			px *= scale;
+			py *= scale;
+
+			seg.v2.x = seg.v1.x + px;
+			seg.v2.y = seg.v1.y + py;
+		}
+
+		scaleTo(seg: ISegment, n: number): void {
+			let p: number = ha.segment.length(seg);
+			let scale: number = n / p;
+			this.scale(seg, scale);
 		}
 
 		getUpSeg(seg: ISegment): ISegment {
@@ -117,7 +140,7 @@ namespace ha {
 		 */
 		isPointOnTheLeftOfSeg(p: IV2D, seg: ISegment): number {
 			let bound: IRect = ha.segment.rect(seg);
-			let boundPos: IV2D = ha.point.boundPos(p, bound);
+			let boundPos: IV2D = ha.point.boundPosData(p, bound);
 
 			//check bound
 			if (4 == boundPos.x) return 0;

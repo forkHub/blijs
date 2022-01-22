@@ -7,7 +7,7 @@ namespace ha {
 			}
 		}
 
-		boundPos(p: IV2D, bound: IRect): IV2D {
+		boundPosData(p: IV2D, bound: IRect): IV2D {
 			let h: number = 0;
 			let v: number = 0;
 
@@ -49,13 +49,12 @@ namespace ha {
 		}
 
 		copy(p: IV2D): IV2D {
-			return this.create(p.y, p.y);
+			let h: IV2D = this.create(p.x, p.y);
+			return h;
 		}
 
 		distFromPos(p: IV2D, x: number = 0, y: number = 0): number {
-			let pjx: number = p.y - x;
-			let pjy: number = p.y - y;
-			return Math.sqrt(pjx * pjx + pjy * pjy);
+			return ha.trans.dist(p.x, p.y, x, y);
 		}
 
 		distToSeg(p: IV2D, seg: ISegment): number {
@@ -68,39 +67,47 @@ namespace ha {
 			return Math.abs(Math.round(p2.y));
 		}
 
-		//TODO:
 		equal(p1: IV2D, p2: IV2D): boolean {
-			p1;
-			p2;
-			return false;
+			if (false == ha.trans.equal(p1.x, p2.x)) return false;
+			if (false == ha.trans.equal(p1.y, p2.y)) return false;
+			return true;
 		}
 
-		scaleFromPos(p: IV2D, xc: number = 0, yc: number = 0, scaleX: number = 1, scaleY: number = 1): void {
-			p.y = xc + (p.y - xc) * scaleX;
-			p.y = yc + (p.y - yc) * scaleY;
-		}
+		// scaleRel(p: IV2D, xc: number = 0, yc: number = 0, scaleX: number = 1, scaleY: number = 1): void {
+		// 	p.y = xc + (p.y - xc) * scaleX;
+		// 	p.y = yc + (p.y - yc) * scaleY;
+		// }
 
 		translate(p: IV2D, x: number = 0, y: number = 0): void {
-			p.y += x;
+			p.x += x;
 			p.y += y;
 		}
 
-		rel(p: IV2D, x: number = 0, y: number = 0): void {
-			p.y -= x;
-			p.y -= y;
-		}
-
 		rotateRel(p: IV2D, xc: number = 0, yc: number = 0, deg: number = 0): void {
-			let p2: IV2D = ha.trans.rotateRel(p.y, p.y, xc, yc, deg);
+			ha.trans.rotateRel(p.x, p.y, xc, yc, deg);
 
-			p.y = p.y + p2.y;
-			p.y = p.y + p2.y;
+			// console.log('rotate rel');
+			// console.log('p.x ' + p.x);
+			// console.log('p.y ' + p.y);
+			// console.log('xc ' + xc);
+			// console.log('yc ' + yc);
+			// console.log('deg ' + deg);
+			// console.log('last x ' + Math.floor(ha.trans.lastX));
+			// console.log('last y ' + Math.floor(ha.trans.lastY));
+
+			p.x = ha.trans.lastX;
+			p.y = ha.trans.lastY;
+
+			// console.log('p.x ' + p.x);
+			// console.log('p.y ' + p.y);
+
+			// console.log('rotate rel end');
 		}
 
 		moveTo(p: IV2D, x: number = 0, y: number = 0, speed: number = 10): void {
-			let p2: IV2D = ha.trans.moveTo(p.y, p.y, x, y, speed);
-			p.y += p2.y;
-			p.y += p2.y;
+			ha.trans.moveTo(p.y, p.y, x, y, speed);
+			p.x = ha.trans.lastX;
+			p.y = ha.trans.lastY;
 		}
 
 		moveFrom(p: IV2D, x: number = 0, y: number = 0, speed: number = 10): void {

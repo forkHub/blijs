@@ -3,6 +3,16 @@ namespace ha {
 		readonly RAD2DEG: number = 180.0 / Math.PI;
 		readonly DEG2RAD: number = Math.PI / 180.0;
 
+		private _lastX: number = 0;
+		private _lastY: number = 0;
+
+		public get lastX(): number {
+			return this._lastX;
+		}
+		public get lastY(): number {
+			return this._lastY;
+		}
+
 		clamp(n: number, m: number): number {
 			let m2 = Math.abs(m);
 			let n2 = Math.abs(n);
@@ -14,6 +24,7 @@ namespace ha {
 
 		equal(n1: number, n2: number, tol: number = 1): boolean {
 			if (Math.abs(n1 - n2) <= tol) return true;
+			// console.log("equal failed " + Math.abs(n1 - n2) + "/" + Math.abs(n1) + "/" + Math.abs(n2));
 			return false;
 		}
 
@@ -88,11 +99,11 @@ namespace ha {
 			return deg;
 		}
 
-		angleMaxDist(angleS: number = 0, angleT: number): number {
+		degMaxDist(angleS: number = 0, angleT: number): number {
 			angleS = this.normalizeDeg(angleS);
 			angleT = this.normalizeDeg(angleT);
 
-			let deg: number = this.angleMinDist(angleS, angleT);
+			let deg: number = this.degMinDist(angleS, angleT);
 			if (deg >= 0) {
 				return -(360 - deg);
 			}
@@ -118,7 +129,7 @@ namespace ha {
 			// }
 		}
 
-		angleMinDist(angleS: number = 0, angleT: number): number {
+		degMinDist(angleS: number = 0, angleT: number): number {
 			angleS = this.normalizeDeg(angleS);
 			angleT = this.normalizeDeg(angleT);
 
@@ -140,16 +151,27 @@ namespace ha {
 			}
 		}
 
-		moveTo(x: number, y: number, xt: number, yt: number, v: number): IV2D {
+		vectorTo(x: number, y: number, xt: number, yt: number): IV2D {
+			let pjx: number = xt - x;
+			let pjy: number = yt - y;
+
+			this._lastX = pjx;
+			this._lastY = pjy;
+
+			return {
+				x: pjx,
+				y: pjy
+			}
+		}
+
+		moveTo(x: number, y: number, xt: number, yt: number, clamp: number): void {
 			let pjx: number = xt - x;
 			let pjy: number = yt - y;
 			let pj: number = this.dist(x, y, xt, yt);
-			let perb: number = Math.abs(v) / pj;
+			let perb: number = Math.abs(clamp) / pj;
 
-			return {
-				x: perb * pjx,
-				y: perb * pjy
-			}
+			this._lastX = x + perb * pjx;
+			this._lastY = y + perb * pjy;
 		}
 
 		moveFrom(x: number = 0, y: number = 0, xt: number = 0, yt: number = 0, v: number = 0): IV2D {
@@ -158,9 +180,12 @@ namespace ha {
 			let pj: number = this.dist(x, y, xt, yt);
 			let perb: number = Math.abs(v) / pj;
 
+			this._lastX = perb * -pjx;
+			this._lastY = perb * -pjy;
+
 			return {
-				x: perb * -pjx,
-				y: perb * -pjy
+				x: this._lastX,
+				y: this._lastY
 			}
 		}
 
@@ -172,39 +197,50 @@ namespace ha {
 
 		rotateFrom(x: number, y: number, tx: number, ty: number, rotNow: number): number {
 			let angle: number = this.deg(tx - x, ty - y);
-			let angleMin: number = this.angleMaxDist(rotNow, angle);
+			let angleMin: number = this.degMaxDist(rotNow, angle);
 			return angleMin;
 		}
 
 		rotateTo(x: number, y: number, tx: number = 0, ty: number = 0, rotNow: number = 0): number {
 			let angle: number = this.deg(tx - x, ty - y);
-			let angleMin: number = this.angleMinDist(rotNow, angle);
+			let angleMin: number = this.degMinDist(rotNow, angle);
 			return angleMin;
 		}
 
-		rotateRel(x: number = 0, y: number = 0, xt: number = 0, yt: number = 0, deg: number = 10): IV2D {
+		rotateRel(x: number = 0, y: number = 0, xt: number = 0, yt: number = 0, deg: number = 10): void {
 			let xr: number = x - xt;
 			let yr: number = y - yt;
 			let x1: number;
 			let y1: number;
+
+			console.group('transform roteate rel:');
+			console.log('xr ' + xr + '/yr ' + yr);
+			console.log('deg ' + deg);
 
 			deg *= ha.trans.DEG2RAD;
 
 			x1 = xr * Math.cos(deg) - yr * Math.sin(deg);
 			y1 = xr * Math.sin(deg) + yr * Math.cos(deg);
 
-			return {
-				x: x1 - xr,
-				y: y1 - yr
-			}
+			console.log('x1 ' + Math.round(x1) + '/y1 ' + Math.round(y1));
+
+			this._lastX = x1 + xt;
+			this._lastY = y1 + yt;
+
+			console.log('last ' + Math.round(this._lastX) + '/' + Math.round(this._lastY));
+
+			console.groupEnd();
 		}
 
 		moveByDeg(speed: number = 10, deg: number = 10): IV2D {
-			// deg = this.normalizeDeg(deg);
 			deg *= this.DEG2RAD;
+
+			this._lastX = Math.cos(deg) * speed;
+			this._lastY = Math.sin(deg) * speed;
+
 			return {
-				x: Math.cos(deg) * speed,
-				y: Math.sin(deg) * speed
+				x: this._lastX,
+				y: this._lastY
 			}
 		}
 

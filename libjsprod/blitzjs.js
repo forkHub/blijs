@@ -7,7 +7,6 @@ var ha;
                 this._fps = 1000 / 30;
                 this._canvasAr = [];
                 this.windowResize = () => {
-                    console.debug('window on resize');
                     let canvas = ha.blitz.blWindow._canvasAktif.canvas;
                     let cp = ha.blitz.blWindow._canvasAktif.canvas.width;
                     let cl = ha.blitz.blWindow._canvasAktif.canvas.height;
@@ -22,7 +21,6 @@ var ha;
                     canvas.style.height = cl2 + 'px';
                     canvas.style.top = ((wl - cl2) / 2) + 'px';
                     canvas.style.left = ((wp - cp2) / 2) + 'px';
-                    console.debug('canvas w: ' + canvas.style.width + '/ratio: ' + ratio);
                 };
                 this.loop = async () => {
                     let _window = window;
@@ -201,8 +199,6 @@ var ha;
                     inputBaru = {
                         key: e,
                         type: inputType,
-                        // down: [],
-                        // hit: [],
                         isDown: false,
                         isDrag: false,
                         isHit: false,
@@ -280,7 +276,6 @@ var ha;
                 input.isDown = true;
                 input.isDrag = false;
                 input.isTap = false;
-                //pertama
                 if (!e.repeat) {
                     input.timerStart = Date.now();
                     input.isHit = true;
@@ -298,12 +293,6 @@ var ha;
         blitz.input = new Input();
     })(blitz = ha.blitz || (ha.blitz = {}));
 })(ha || (ha = {}));
-///<reference path="../ha/Window.ts"/>
-///<reference path="../ha/Image.ts"/>
-///<reference path="../ha/Input.ts"/>
-/**
- * IMAGE
- */
 const CreateImage = (w = 32, h = 32, frameW = 32, frameH = 32) => {
     let canvas = document.createElement('canvas');
     let img;
@@ -326,10 +315,6 @@ const CreateImage = (w = 32, h = 32, frameW = 32, frameH = 32) => {
     };
     return img;
 };
-/* TODO [next]:
- * skip drawing outside
- * image blitting
-*/
 const DrawImage = (img, x = 0, y = 0, frame = 0) => {
     let ctx = ha.blitz.blWindow.canvasAktif.ctx;
     let jmlH;
@@ -372,7 +357,6 @@ const ImageWidth = (img) => { return img.frameW * img.scaleX; };
 const ImageHeight = (img) => { return img.frameH * img.scaleY; };
 const ImageXHandle = (img) => { return img.handleX; };
 const ImageYHandle = (img) => { return img.handleY; };
-//TODO:
 const ImageOverlap = () => { };
 const ImageColRect = () => { };
 const ImageRectOverlap = () => { };
@@ -393,8 +377,6 @@ const LoadImage = async (url) => {
         height: img.naturalHeight,
         frameH: img.naturalHeight,
         frameW: img.naturalWidth,
-        // width2: img.naturalWidth,
-        // height2: img.naturalHeight,
         isAnim: false,
         handleX: 0,
         handleY: 0,
@@ -418,8 +400,6 @@ const LoadAnimImage = async (url, w = 32, h = 32) => {
         height: img.naturalHeight,
         frameH: w,
         frameW: h,
-        // width2: w,
-        // height2: h,
         isAnim: true,
         handleX: 0,
         handleY: 0,
@@ -485,23 +465,11 @@ const SetColor = (r = 255, g = 255, b = 255, a = 1) => {
 const SetPixel = (x = 0, y = 0) => {
     ha.blitz.blWindow.canvasAktif.ctx.fillRect(Math.floor(x), Math.floor(y), 1, 1);
 };
-//TODO: next
 const ImagePivot = () => { };
 const BackgroundImage = () => { };
 const MainLayer = () => { };
 const CreateLayer = () => { };
 const LayerZ = () => { };
-//dep
-// const TFormImage = () => { }
-//const FeeImage = () => { }
-//const DrawImageRect = () => { }
-//const ImageBuffer = () => { }
-///<reference path="../ha/Window.ts"/>
-///<reference path="../ha/Image.ts"/>
-///<reference path="../ha/Input.ts"/>
-/*
- * INPUT
- */
 const Input = (m, def) => {
     let hasil = window.prompt(m, def);
     return hasil;
@@ -519,7 +487,6 @@ const InputHit = (type = "", kode = '0') => {
         return true;
     }
     else {
-        // console.debug("is hit: " + BLInput.isHit + "/type: " + BLInput.type);
     }
     return false;
 };
@@ -536,11 +503,9 @@ const InputTap = (type = "", kode = '0') => {
         return true;
     }
     else {
-        // console.debug("is hit: " + BLInput.isHit + "/type: " + BLInput.type);
     }
     return false;
 };
-//TOTO: check
 const WaitInput = async (type = '', kode = 0) => {
     return new Promise((resolve, _reject) => {
         let check = () => {
@@ -578,24 +543,17 @@ const FlushInput = () => {
     blitzConf.input.isTap = false;
     ha.blitz.input.flush();
 };
-//TODO: key
 const InputKey = () => {
     return blitzConf.input.key;
 };
-//TODO: key
 const InputDown = () => {
     return blitzConf.input.isDown;
 };
-//TODO: key
 const InputDrag = (type = '', key = '') => {
     type;
     key;
     return blitzConf.input.isDrag;
 };
-/**
- * 	KEYBOARD
- */
-//TODO:
 const FlushKeys = () => {
 };
 const GetKey = () => {
@@ -619,9 +577,6 @@ const WaitKey = async (kode = "keyb") => {
         check();
     });
 };
-/**
- * MOUSE
- */
 const GetMouse = () => {
     return 0;
 };
@@ -645,19 +600,6 @@ const MouseZ = () => {
 };
 const FlushMouse = () => {
 };
-//MouseDragX
-//MouseDragY
-//MouseDragAngle
-//MouseUp
-/**
- * INTERFACE
-*/
-///<reference path="../ha/Window.ts"/>
-///<reference path="../ha/Image.ts"/>
-///<reference path="../ha/Input.ts"/>
-/*
- * 	GRAPHICS
- */
 const Cls = (r = 0, g = 0, b = 0, alpha = 1) => {
     let ctx = ha.blitz.blWindow.canvasAktif.ctx;
     ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
@@ -700,30 +642,11 @@ const Rect = () => { };
 const SetBuffer = (buffer) => {
     ha.blitz.blWindow.canvasAktif = buffer;
 };
-//TODO: dep
 const WritePixel = () => { };
 const ReadPixel = () => { };
 const Plot = () => { };
-///<reference path="../ha/Window.ts"/>
-///<reference path="../ha/Image.ts"/>
-///<reference path="../ha/Input.ts"/>
-/**
- * MAIN
- */
 var blitzConf = {
-    // canvas: {
-    // 	el: null,
-    // 	ctx: null,
-    // 	w: 320,
-    // 	h: 240,
-    // 	pixel: true,
-    // 	gl: true,
-    // 	scaleX: 1,
-    // 	scaleY: 1
-    // },
     input: {
-        // down: [],
-        // hit: [],
         isDrag: false,
         xDrag: 0,
         xStart: 0,
@@ -819,15 +742,6 @@ window.onload = () => {
         }
     }, 0);
 };
-///<reference path="../ha/Window.ts"/>
-///<reference path="../ha/Image.ts"/>
-///<reference path="../ha/Input.ts"/>
-///<reference path="../ha/Window.ts"/>
-///<reference path="../ha/Image.ts"/>
-///<reference path="../ha/Input.ts"/>
-///<reference path="../ha/Window.ts"/>
-///<reference path="../ha/Image.ts"/>
-///<reference path="../ha/Input.ts"/>
 const CreateTimer = (t) => {
     return {
         endTime: Date.now() + t,
@@ -870,7 +784,6 @@ const FPS = (n) => {
         ha.blitz.blWindow.fps = 0;
     }
 };
-//TODO: masukin ke lib, kepanjangen
 const Dim = (...args) => {
     if (0 == args.length) {
         return [];
@@ -951,9 +864,6 @@ const Dim = (...args) => {
 const Millisecs = () => {
     return Date.now();
 };
-/**
- * TEXTS
- */ 
 var ha;
 (function (ha) {
     class Line {
@@ -987,14 +897,12 @@ var ha;
                 y: y
             };
         }
-        boundPos(p, bound) {
+        boundPosData(p, bound) {
             let h = 0;
             let v = 0;
-            //TODO: next check boundary rotated
             if (ha.segment.deg(bound.segs[1]) != 0) {
                 ha.rect.rotateToHor(bound);
             }
-            //check hor
             if (ha.trans.equal(ha.rect.minX(bound), p.x)) {
                 v = 1;
             }
@@ -1010,7 +918,6 @@ var ha;
             else {
                 h = 2;
             }
-            //check ver
             if (ha.trans.equal(ha.rect.minY(bound), p.y)) {
                 h = 1;
             }
@@ -1029,12 +936,11 @@ var ha;
             return ha.point.create(h, v);
         }
         copy(p) {
-            return this.create(p.y, p.y);
+            let h = this.create(p.x, p.y);
+            return h;
         }
         distFromPos(p, x = 0, y = 0) {
-            let pjx = p.y - x;
-            let pjy = p.y - y;
-            return Math.sqrt(pjx * pjx + pjy * pjy);
+            return ha.trans.dist(p.x, p.y, x, y);
         }
         distToSeg(p, seg) {
             let seg2 = ha.segment.getUpSeg(seg);
@@ -1043,33 +949,26 @@ var ha;
             ha.point.rotateRel(p2, seg2.v1.y, seg2.v2.y, -seg2Deg);
             return Math.abs(Math.round(p2.y));
         }
-        //TODO:
         equal(p1, p2) {
-            p1;
-            p2;
-            return false;
-        }
-        scaleFromPos(p, xc = 0, yc = 0, scaleX = 1, scaleY = 1) {
-            p.y = xc + (p.y - xc) * scaleX;
-            p.y = yc + (p.y - yc) * scaleY;
+            if (false == ha.trans.equal(p1.x, p2.x))
+                return false;
+            if (false == ha.trans.equal(p1.y, p2.y))
+                return false;
+            return true;
         }
         translate(p, x = 0, y = 0) {
-            p.y += x;
+            p.x += x;
             p.y += y;
         }
-        rel(p, x = 0, y = 0) {
-            p.y -= x;
-            p.y -= y;
-        }
         rotateRel(p, xc = 0, yc = 0, deg = 0) {
-            let p2 = ha.trans.rotateRel(p.y, p.y, xc, yc, deg);
-            p.y = p.y + p2.y;
-            p.y = p.y + p2.y;
+            ha.trans.rotateRel(p.x, p.y, xc, yc, deg);
+            p.x = ha.trans.lastX;
+            p.y = ha.trans.lastY;
         }
         moveTo(p, x = 0, y = 0, speed = 10) {
-            let p2 = ha.trans.moveTo(p.y, p.y, x, y, speed);
-            p.y += p2.y;
-            p.y += p2.y;
+            ha.trans.moveTo(p.y, p.y, x, y, speed);
+            p.x = ha.trans.lastX;
+            p.y = ha.trans.lastY;
         }
         moveFrom(p, x = 0, y = 0, speed = 10) {
             let p2 = ha.trans.moveFrom(p.y, p.y, x, y, speed);
@@ -1134,7 +1033,6 @@ var ha;
             return y;
         }
         rotateToHor(r) {
-            //TODO:
             r;
         }
     }
@@ -1159,7 +1057,7 @@ var ha;
             if (!ha.segment.crossHor(seg))
                 return null;
             let seg2 = ha.segment.getUpSeg(seg);
-            let perbV = (ha.segment.vecJ(seg2)) / seg2.v2.y;
+            let perbV = seg2.v2.y / (ha.segment.vecJ(seg2));
             let x;
             x = seg2.v2.x + (perbV * ha.segment.vecI(seg2));
             return x;
@@ -1189,6 +1087,11 @@ var ha;
                 v2: ha.point.copy(seg.v1)
             };
         }
+        length(seg) {
+            let x = this.vecI(seg);
+            let y = this.vecJ(seg);
+            return Math.sqrt(x * x + y * y);
+        }
         vecI(seg) {
             return seg.v2.x - seg.v1.x;
         }
@@ -1201,6 +1104,19 @@ var ha;
         }
         seg2Vec(seg) {
             return ha.point.create(seg.v2.y - seg.v1.y, seg.v2.y - seg.v1.y);
+        }
+        scale(seg, scale) {
+            let px = seg.v2.x - seg.v1.x;
+            let py = seg.v2.y - seg.v1.y;
+            px *= scale;
+            py *= scale;
+            seg.v2.x = seg.v1.x + px;
+            seg.v2.y = seg.v1.y + py;
+        }
+        scaleTo(seg, n) {
+            let p = ha.segment.length(seg);
+            let scale = n / p;
+            this.scale(seg, scale);
         }
         getUpSeg(seg) {
             return {
@@ -1228,16 +1144,9 @@ var ha;
                 return seg.v1;
             return seg.v2;
         }
-        /**
-         * whether a point position is on the left side of a segment
-         * @param p point
-         * @param seg segment
-         * @returns 0 = false, 1 = true, 2 = true, on tip
-         */
         isPointOnTheLeftOfSeg(p, seg) {
             let bound = ha.segment.rect(seg);
-            let boundPos = ha.point.boundPos(p, bound);
-            //check bound
+            let boundPos = ha.point.boundPosData(p, bound);
             if (4 == boundPos.x)
                 return 0;
             if (boundPos.y in [0, 4])
@@ -1248,7 +1157,6 @@ var ha;
                 return 2;
             if (ha.trans.equal(p.y, seg.v2.y))
                 return 2;
-            //test 
             let seg2 = ha.segment.getUpSeg(seg);
             let p2 = ha.point.copy(p);
             let deg = ha.segment.deg(seg2);
@@ -1261,20 +1169,12 @@ var ha;
         rect(seg) {
             return ha.rect.create(seg.v1.x, seg.v1.y, seg.v2.x, seg.v2.y);
         }
-        /**
-         * rotate segment so that it is pararel to horzontal axis based on the first point as center of rotation
-         * @param seg
-         */
         rotateHor(seg) {
             let deg = ha.segment.deg(seg);
             if (0 == deg)
                 return;
             ha.segment.rotate(seg, -deg, seg.v1.x, seg.v1.y);
         }
-        /**
-         * rotate segment so that it is pararel to vertical axis based on the first point as center of rotation
-         * @param seg
-         */
         rotateVer(seg) {
             let deg = ha.segment.deg(seg);
             if (deg < 90)
@@ -1297,6 +1197,14 @@ var ha;
         constructor() {
             this.RAD2DEG = 180.0 / Math.PI;
             this.DEG2RAD = Math.PI / 180.0;
+            this._lastX = 0;
+            this._lastY = 0;
+        }
+        get lastX() {
+            return this._lastX;
+        }
+        get lastY() {
+            return this._lastY;
         }
         clamp(n, m) {
             let m2 = Math.abs(m);
@@ -1312,7 +1220,6 @@ var ha;
             return false;
         }
         quadDeg(x, y) {
-            // console.log('quad x: ' + x + '/y: ' + y);
             if (x == 0) {
                 if (y >= 0) {
                     return 0;
@@ -1360,7 +1267,6 @@ var ha;
             return s;
         }
         normalizeDeg(deg) {
-            // console.log('normalize anggle, input: ' + deg);
             while (deg >= 360) {
                 deg -= 360;
             }
@@ -1369,37 +1275,20 @@ var ha;
             }
             if (deg < 0)
                 deg = 360 + deg;
-            // console.log('normalize anggle, output: ' + deg);
             return deg;
         }
-        angleMaxDist(angleS = 0, angleT) {
+        degMaxDist(angleS = 0, angleT) {
             angleS = this.normalizeDeg(angleS);
             angleT = this.normalizeDeg(angleT);
-            let deg = this.angleMinDist(angleS, angleT);
+            let deg = this.degMinDist(angleS, angleT);
             if (deg >= 0) {
                 return -(360 - deg);
             }
             else {
                 return (360 - Math.abs(deg));
             }
-            // if (angleT > angleS) {
-            // 	if (angleT - angleS > 180) {
-            // 		return angleT - angleS;
-            // 	}
-            // 	else {
-            // 		return -(angleS + 360 - angleT);
-            // 	}
-            // }
-            // else {
-            // 	if (angleS - angleT > 180) {
-            // 		return angleT - angleS;
-            // 	}
-            // 	else {
-            // 		return 360 + angleT - angleS;
-            // 	}
-            // }
         }
-        angleMinDist(angleS = 0, angleT) {
+        degMinDist(angleS = 0, angleT) {
             angleS = this.normalizeDeg(angleS);
             angleT = this.normalizeDeg(angleT);
             if (angleT >= angleS) {
@@ -1419,24 +1308,34 @@ var ha;
                 }
             }
         }
-        moveTo(x, y, xt, yt, v) {
+        vectorTo(x, y, xt, yt) {
+            let pjx = xt - x;
+            let pjy = yt - y;
+            this._lastX = pjx;
+            this._lastY = pjy;
+            return {
+                x: pjx,
+                y: pjy
+            };
+        }
+        moveTo(x, y, xt, yt, clamp) {
             let pjx = xt - x;
             let pjy = yt - y;
             let pj = this.dist(x, y, xt, yt);
-            let perb = Math.abs(v) / pj;
-            return {
-                x: perb * pjx,
-                y: perb * pjy
-            };
+            let perb = Math.abs(clamp) / pj;
+            this._lastX = x + perb * pjx;
+            this._lastY = y + perb * pjy;
         }
         moveFrom(x = 0, y = 0, xt = 0, yt = 0, v = 0) {
             let pjx = xt - x;
             let pjy = yt - y;
             let pj = this.dist(x, y, xt, yt);
             let perb = Math.abs(v) / pj;
+            this._lastX = perb * -pjx;
+            this._lastY = perb * -pjy;
             return {
-                x: perb * -pjx,
-                y: perb * -pjy
+                x: this._lastX,
+                y: this._lastY
             };
         }
         dist(x, y, xt, yt) {
@@ -1446,12 +1345,12 @@ var ha;
         }
         rotateFrom(x, y, tx, ty, rotNow) {
             let angle = this.deg(tx - x, ty - y);
-            let angleMin = this.angleMaxDist(rotNow, angle);
+            let angleMin = this.degMaxDist(rotNow, angle);
             return angleMin;
         }
         rotateTo(x, y, tx = 0, ty = 0, rotNow = 0) {
             let angle = this.deg(tx - x, ty - y);
-            let angleMin = this.angleMinDist(rotNow, angle);
+            let angleMin = this.degMinDist(rotNow, angle);
             return angleMin;
         }
         rotateRel(x = 0, y = 0, xt = 0, yt = 0, deg = 10) {
@@ -1459,20 +1358,25 @@ var ha;
             let yr = y - yt;
             let x1;
             let y1;
+            console.group('transform roteate rel:');
+            console.log('xr ' + xr + '/yr ' + yr);
+            console.log('deg ' + deg);
             deg *= ha.trans.DEG2RAD;
             x1 = xr * Math.cos(deg) - yr * Math.sin(deg);
             y1 = xr * Math.sin(deg) + yr * Math.cos(deg);
-            return {
-                x: x1 - xr,
-                y: y1 - yr
-            };
+            console.log('x1 ' + Math.round(x1) + '/y1 ' + Math.round(y1));
+            this._lastX = x1 + xt;
+            this._lastY = y1 + yt;
+            console.log('last ' + Math.round(this._lastX) + '/' + Math.round(this._lastY));
+            console.groupEnd();
         }
         moveByDeg(speed = 10, deg = 10) {
-            // deg = this.normalizeDeg(deg);
             deg *= this.DEG2RAD;
+            this._lastX = Math.cos(deg) * speed;
+            this._lastY = Math.sin(deg) * speed;
             return {
-                x: Math.cos(deg) * speed,
-                y: Math.sin(deg) * speed
+                x: this._lastX,
+                y: this._lastY
             };
         }
     }
