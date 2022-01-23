@@ -14,7 +14,11 @@ const Cls = (r: number = 0, g: number = 0, b: number = 0, alpha: number = 1): vo
 
 const BackBuffer = () => { }
 
-const Color = () => { }
+const Color = (r: number = 0, g: number = 0, b: number = 0, a: number = 1) => {
+	let ctx: CanvasRenderingContext2D = ha.blitz.blWindow.canvasAktif.ctx;
+	ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+	ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+}
 
 const ColorRed = () => { }
 const ColorBlue = () => { }
@@ -56,13 +60,26 @@ const Graphics = (width: number = 320, height: number = 240, gl: boolean = true,
 
 const GraphicsBuffer = () => { }
 
-const Line = () => { }
+const Line = (x1: number, y1: number, x2: number, y2: number) => {
+	let ctx: CanvasRenderingContext2D = ha.blitz.blWindow.canvasAktif.ctx;
+	x1 = Math.floor(x1);
+	y1 = Math.floor(y1);
+	x2 = Math.floor(x2);
+	y2 = Math.floor(y2);
+	ctx.beginPath();
+	ctx.moveTo(x1, y1);
+	ctx.lineTo(x2, y2);
+	ctx.stroke();
+}
 
 const Origin = () => { }
 
 const Oval = () => { }
 
-const Rect = () => { }
+const Rect = (x1: number, y1: number, x2: number, y2: number) => {
+	let ctx: CanvasRenderingContext2D = ha.blitz.blWindow.canvasAktif.ctx;
+	ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+}
 
 const SetBuffer = (buffer: IBuffer) => {
 	ha.blitz.blWindow.canvasAktif = buffer

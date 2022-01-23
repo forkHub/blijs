@@ -213,23 +213,23 @@ namespace ha {
 			let x1: number;
 			let y1: number;
 
-			console.group('transform roteate rel:');
-			console.log('xr ' + xr + '/yr ' + yr);
-			console.log('deg ' + deg);
+			// console.group('transform roteate rel:');
+			// console.log('xr ' + xr + '/yr ' + yr);
+			// console.log('deg ' + deg);
 
 			deg *= ha.trans.DEG2RAD;
 
 			x1 = xr * Math.cos(deg) - yr * Math.sin(deg);
 			y1 = xr * Math.sin(deg) + yr * Math.cos(deg);
 
-			console.log('x1 ' + Math.round(x1) + '/y1 ' + Math.round(y1));
+			// console.log('x1 ' + Math.round(x1) + '/y1 ' + Math.round(y1));
 
 			this._lastX = x1 + xt;
 			this._lastY = y1 + yt;
 
-			console.log('last ' + Math.round(this._lastX) + '/' + Math.round(this._lastY));
+			// console.log('last ' + Math.round(this._lastX) + '/' + Math.round(this._lastY));
 
-			console.groupEnd();
+			// console.groupEnd();
 		}
 
 		moveByDeg(speed: number = 10, deg: number = 10): IV2D {

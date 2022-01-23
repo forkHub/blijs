@@ -1,8 +1,8 @@
-Graphics(640, 480);
-
-let brush: IImage;
+let brush: IBuffer;
 
 async function Start(): Promise<void> {
+	Graphics(640, 480);
+	FPS(60);
 	brush = await LoadImage('./gbr/brush.png');
 	MidHandle(brush);
 }

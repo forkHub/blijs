@@ -460,7 +460,7 @@ const GetPixel = (x = 0, y = 0) => {
     return [0, 0, 0];
 };
 const SetColor = (r = 255, g = 255, b = 255, a = 1) => {
-    ha.blitz.blWindow.canvasAktif.ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (a) + ")";
+    Color(r, g, b, a);
 };
 const SetPixel = (x = 0, y = 0) => {
     ha.blitz.blWindow.canvasAktif.ctx.fillRect(Math.floor(x), Math.floor(y), 1, 1);
@@ -606,7 +606,11 @@ const Cls = (r = 0, g = 0, b = 0, alpha = 1) => {
     ctx.fillRect(0, 0, ha.blitz.blWindow.canvasAktif.width, ha.blitz.blWindow.canvasAktif.height);
 };
 const BackBuffer = () => { };
-const Color = () => { };
+const Color = (r = 0, g = 0, b = 0, a = 1) => {
+    let ctx = ha.blitz.blWindow.canvasAktif.ctx;
+    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+    ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+};
 const ColorRed = () => { };
 const ColorBlue = () => { };
 const ColorGreen = () => { };
@@ -635,10 +639,23 @@ const Graphics = (width = 320, height = 240, gl = true, pixel = true) => {
     ha.blitz.blWindow.windowResize();
 };
 const GraphicsBuffer = () => { };
-const Line = () => { };
+const Line = (x1, y1, x2, y2) => {
+    let ctx = ha.blitz.blWindow.canvasAktif.ctx;
+    x1 = Math.floor(x1);
+    y1 = Math.floor(y1);
+    x2 = Math.floor(x2);
+    y2 = Math.floor(y2);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+};
 const Origin = () => { };
 const Oval = () => { };
-const Rect = () => { };
+const Rect = (x1, y1, x2, y2) => {
+    let ctx = ha.blitz.blWindow.canvasAktif.ctx;
+    ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+};
 const SetBuffer = (buffer) => {
     ha.blitz.blWindow.canvasAktif = buffer;
 };
@@ -1190,6 +1207,7 @@ var ha;
             ha.point.translate(seg.v2, x, y);
         }
     }
+    ha.segment = new Segment();
 })(ha || (ha = {}));
 var ha;
 (function (ha) {
@@ -1358,17 +1376,11 @@ var ha;
             let yr = y - yt;
             let x1;
             let y1;
-            console.group('transform roteate rel:');
-            console.log('xr ' + xr + '/yr ' + yr);
-            console.log('deg ' + deg);
             deg *= ha.trans.DEG2RAD;
             x1 = xr * Math.cos(deg) - yr * Math.sin(deg);
             y1 = xr * Math.sin(deg) + yr * Math.cos(deg);
-            console.log('x1 ' + Math.round(x1) + '/y1 ' + Math.round(y1));
             this._lastX = x1 + xt;
             this._lastY = y1 + yt;
-            console.log('last ' + Math.round(this._lastX) + '/' + Math.round(this._lastY));
-            console.groupEnd();
         }
         moveByDeg(speed = 10, deg = 10) {
             deg *= this.DEG2RAD;

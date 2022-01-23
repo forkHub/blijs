@@ -53,6 +53,7 @@ const InputTap = (type: string = "", kode: string | number = '0'): boolean => {
 
 //TOTO: check
 const WaitInput = async (type: string = '', kode: number = 0): Promise<void> => {
+
 	return new Promise((resolve, _reject) => {
 		let check = (): void => {
 			if (InputHit(type, kode)) {

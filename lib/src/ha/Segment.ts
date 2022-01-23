@@ -198,5 +198,5 @@ namespace ha {
 		}
 	}
 
-	export var segment: Segment;
-}
+	export var segment: Segment = new Segment();
+} 

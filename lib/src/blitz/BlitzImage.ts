@@ -222,7 +222,7 @@ const GetPixel = (x: number = 0, y: number = 0): number[] => {
 }
 
 const SetColor = (r: number = 255, g: number = 255, b: number = 255, a: number = 1) => {
-	ha.blitz.blWindow.canvasAktif.ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (a) + ")";
+	Color(r, g, b, a);
 }
 
 const SetPixel = (x: number = 0, y: number = 0) => {
@@ -237,6 +237,7 @@ const MainLayer = () => { }
 
 const CreateLayer = () => { }
 const LayerZ = () => { }
+
 
 //dep
 // const TFormImage = () => { }
