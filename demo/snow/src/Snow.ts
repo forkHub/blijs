@@ -89,13 +89,6 @@ function drawSnow(xAdd: number, yAdd: number, snow: ISnow) {
 	SetPixel(snow.x, snow.y);
 }
 
-function drawAllSnow() {
-	Color(255, 255, 255, 1);
-	snow.forEach((snow: ISnow) => {
-		SetPixel(snow.x, snow.y);
-	})
-}
-
 
 interface ISnow {
 	x: number;
