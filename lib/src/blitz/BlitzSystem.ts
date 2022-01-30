@@ -3,143 +3,143 @@
 ///<reference path="../ha/Input.ts"/>
 
 const CreateTimer = (t: number): ITimer => {
-    return {
-        endTime: Date.now() + t,
-        startTime: Date.now(),
-        aktif: true,
-        time: t
-    }
+	return {
+		endTime: Date.now() + t,
+		startTime: Date.now(),
+		aktif: true,
+		time: t
+	}
 }
 
 const FreeTimer = (t: ITimer) => {
-    t.aktif = false;
+	t.aktif = false;
 }
 
 const WaitTimer = async (t: ITimer): Promise<number> => {
-    return new Promise((resolve, _reject) => {
-        let check = (): void => {
-            if (Date.now() > t.endTime) {
-                let nLewat: number = (Date.now() - t.startTime) / t.time;
+	return new Promise((resolve, _reject) => {
+		let check = (): void => {
+			if (Date.now() > t.endTime) {
+				let nLewat: number = (Date.now() - t.startTime) / t.time;
 
-                t.startTime = Date.now();
-                t.endTime = Date.now() + t.time;
-                resolve(nLewat);
-            }
-            else {
-                setTimeout(() => {
-                    check();
-                }, 0);
-            }
-        }
-        check();
-    });
+				t.startTime = Date.now();
+				t.endTime = Date.now() + t.time;
+				resolve(nLewat);
+			}
+			else {
+				setTimeout(() => {
+					check();
+				}, 0);
+			}
+		}
+		check();
+	});
 }
 
 const Delay = async (m: number = 0): Promise<void> => {
-    return new Promise((resolve, _reject) => {
-        setTimeout(() => {
-            resolve();
-        }, m);
-    })
+	return new Promise((resolve, _reject) => {
+		setTimeout(() => {
+			resolve();
+		}, m);
+	})
 }
 
 const FPS = (n: number) => {
-    ha.blitz.blWindow.fps = Math.floor(1000 / n);
-    if (n >= 60) {
-        ha.blitz.blWindow.fps = 0;
-    }
+	ha.blitz.main.fps = Math.floor(1000 / n);
+	if (n >= 60) {
+		ha.blitz.main.fps = 0;
+	}
 }
 
 //TODO: masukin ke lib, kepanjangen
 const Dim = (...args: any[]): any[] => {
 
-    if (0 == args.length) {
-        return [];
-    }
+	if (0 == args.length) {
+		return [];
+	}
 
-    else if (1 == args.length) {
-        let hasil: any[] = [];
-        for (let i: number = 0; i < args[0]; i++) {
-            hasil[i] = {}
-        }
-        return hasil;
-    }
+	else if (1 == args.length) {
+		let hasil: any[] = [];
+		for (let i: number = 0; i < args[0]; i++) {
+			hasil[i] = {}
+		}
+		return hasil;
+	}
 
-    else if (2 == args.length) {
-        if (typeof args[1] == 'number') {
-            let hasil: any[] = [];
-            for (let i: number = 0; i < args[0]; i++) {
-                hasil[i] = [];
-                for (let j: number = 0; j < args[1]; j++) {
-                    hasil[i][j] = {}
-                }
-            }
+	else if (2 == args.length) {
+		if (typeof args[1] == 'number') {
+			let hasil: any[] = [];
+			for (let i: number = 0; i < args[0]; i++) {
+				hasil[i] = [];
+				for (let j: number = 0; j < args[1]; j++) {
+					hasil[i][j] = {}
+				}
+			}
 
-            return hasil;
-        }
-        else if (typeof args[1] == 'function') {
-            let hasil: any[] = [];
-            for (let i: number = 0; i < args[0]; i++) {
-                hasil[i] = {}
-                args[1](hasil[i]);
-            }
-            return hasil;
-        }
-        else if (typeof args[1] == 'object') {
-            let hasil: any[] = [];
-            for (let i: number = 0; i < args[0]; i++) {
-                try {
-                    hasil[i] = JSON.parse(JSON.stringify(args[1]));
-                }
-                catch (e) {
-                    console.error(e);
-                    hasil[i] = {}
-                }
-            }
-            return hasil;
-        }
-        else {
-            throw new Error('second argument is invalid, expected number or function or object');
-        }
-    }
+			return hasil;
+		}
+		else if (typeof args[1] == 'function') {
+			let hasil: any[] = [];
+			for (let i: number = 0; i < args[0]; i++) {
+				hasil[i] = {}
+				args[1](hasil[i]);
+			}
+			return hasil;
+		}
+		else if (typeof args[1] == 'object') {
+			let hasil: any[] = [];
+			for (let i: number = 0; i < args[0]; i++) {
+				try {
+					hasil[i] = JSON.parse(JSON.stringify(args[1]));
+				}
+				catch (e) {
+					console.error(e);
+					hasil[i] = {}
+				}
+			}
+			return hasil;
+		}
+		else {
+			throw new Error('second argument is invalid, expected number or function or object');
+		}
+	}
 
-    else if (3 == args.length) {
+	else if (3 == args.length) {
 
-        if (typeof args[2] == 'function') {
+		if (typeof args[2] == 'function') {
 
-            let hasil: any[] = [];
-            for (let i: number = 0; i < args[0]; i++) {
-                hasil[i] = [];
-                for (let j: number = 0; j < args[1]; j++) {
-                    hasil[i][j] = {}
-                    args[2](hasil[i][j])
-                }
-            }
+			let hasil: any[] = [];
+			for (let i: number = 0; i < args[0]; i++) {
+				hasil[i] = [];
+				for (let j: number = 0; j < args[1]; j++) {
+					hasil[i][j] = {}
+					args[2](hasil[i][j])
+				}
+			}
 
-            return hasil;
-        }
-        else if (typeof args[2] == 'object') {
+			return hasil;
+		}
+		else if (typeof args[2] == 'object') {
 
-            let hasil: any[] = [];
-            for (let i: number = 0; i < args[0]; i++) {
-                hasil[i] = [];
-                for (let j: number = 0; j < args[1]; j++) {
-                    hasil[i][j] = JSON.parse(JSON.stringify(args[2]));
-                }
-            }
+			let hasil: any[] = [];
+			for (let i: number = 0; i < args[0]; i++) {
+				hasil[i] = [];
+				for (let j: number = 0; j < args[1]; j++) {
+					hasil[i][j] = JSON.parse(JSON.stringify(args[2]));
+				}
+			}
 
-            return hasil;
-        }
-        else {
-            throw Error('expecting third argument is a function or object');
-        }
+			return hasil;
+		}
+		else {
+			throw Error('expecting third argument is a function or object');
+		}
 
-    }
-    else {
-        throw Error('arguments invalid, expected max arguments: 3');
-    }
+	}
+	else {
+		throw Error('arguments invalid, expected max arguments: 3');
+	}
 }
 
 const Millisecs = (): number => {
-    return Date.now();
+	return Date.now();
 }

@@ -42,11 +42,12 @@ interface IInput {
 	isDown: boolean;
 	isTap: boolean;
 	isHit: boolean;
+	hit: number;
 	key: string;
 	type: string;
 	timerStart: number;
 	timerEnd: number;
-	id: number;
+	id: number;	//TODO: mungkin bisa dihapus
 }
 
 interface IInputData {

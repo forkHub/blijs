@@ -1,1 +1,2 @@
-image diganti canvas
+ada overlay khusus buat input
+input ditaruh di namespace ha

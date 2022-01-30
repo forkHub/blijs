@@ -6,57 +6,20 @@
  * INPUT
  */
 
-const Input = (m: string, def: string): string => {
+const Prompt = (m: string, def: string): string => {
 	let hasil: string = window.prompt(m, def);
 	return hasil;
 }
 
-const InputHit = (type: string = "", kode: string | number = '0'): boolean => {
-	kode = kode + '';
-
-	if (type == "") {
-		if (BLInput.isHit) {
-			BLInput.isHit = false;
-			return true;
-		}
-	}
-	else if ((BLInput.isHit) && (BLInput.key == kode) && (BLInput.type == type)) {
-		BLInput.isHit = false;
-		return true;
-	}
-	else {
-		// console.debug("is hit: " + BLInput.isHit + "/type: " + BLInput.type);
-	}
-
-	return false;
+const InputHit = (): boolean => {
+	return ha.blitz.input.input.isHit; //TODO:
 }
 
-const InputTap = (type: string = "", kode: string | number = '0'): boolean => {
-	kode = kode + '';
-
-	if (type == "") {
-		if (BLInput.isTap) {
-			BLInput.isTap = false;
-			return true;
-		}
-	}
-	else if ((BLInput.isTap) && (BLInput.key == kode) && (BLInput.type == type)) {
-		BLInput.isTap = false;
-		return true;
-	}
-	else {
-		// console.debug("is hit: " + BLInput.isHit + "/type: " + BLInput.type);
-	}
-
-	return false;
-}
-
-//TOTO: check
-const WaitInput = async (type: string = '', kode: number = 0): Promise<void> => {
+const WaitInput = async (): Promise<void> => {
 
 	return new Promise((resolve, _reject) => {
 		let check = (): void => {
-			if (InputHit(type, kode)) {
+			if (InputHit()) {
 				resolve();
 			}
 			else {
@@ -70,76 +33,68 @@ const WaitInput = async (type: string = '', kode: number = 0): Promise<void> => 
 }
 
 const InputX = () => {
-	return blitzConf.input.x;
+	return ha.blitz.input.input.x;
 }
 
 const InputY = () => {
-	return blitzConf.input.y;
-}
-
-const InputType = (): string => {
-	return blitzConf.input.type
+	return ha.blitz.input.input.y;
 }
 
 const InputDragX = (): number => {
-	return blitzConf.input.yDrag
+	return ha.blitz.input.input.yDrag
 }
 
 const InputDragY = (): number => {
-	return blitzConf.input.xDrag
+	return ha.blitz.input.input.xDrag
 }
 
 const FlushInput = () => {
-	blitzConf.input.isHit = false;
-	blitzConf.input.isDown = false;
-	blitzConf.input.isDrag = false;
-	blitzConf.input.isTap = false;
-
 	ha.blitz.input.flush();
 }
 
-//TODO: key
-const InputKey = (): string => {
-	return blitzConf.input.key;
-}
-
-//TODO: key
 const InputDown = (): boolean => {
-	return blitzConf.input.isDown;
+	return ha.blitz.input.input.isDown;
 }
 
-//TODO: key
-const InputDrag = (type: string = '', key: string = ''): boolean => {
-	type;
-	key;
-	return blitzConf.input.isDrag;
+const InputDrag = (): boolean => {
+	return ha.blitz.input.input.isDrag;
 }
 
 /**
  * 	KEYBOARD
  */
-//TODO:
 const FlushKeys = () => {
-
+	ha.blitz.input.flushByInput(ha.blitz.input.keyb);
+	ha.blitz.input.flushByType('keyb');
 }
 
 const GetKey = (): string => {
-	return '';
+	return ha.blitz.input.keyb.key;
 }
 
-const KeyDown = (key: string = '') => {
-	key;
+const KeyIsDown = (key: string = ''): boolean => {
+	if ("" == key) {
+		return ha.blitz.input.keyb.isDown;
+	}
+	else {
+		return false;//TODO:
+	}
 }
 
-const KeyHit = (key: string = '') => {
-	key;
+const KeyHit = (key: string = ''): number => {
+	if ("" == key) {
+		return 1;	//TODO:
+	}
+	else {
+		return 0; //TODO:
+	}
 }
 
 const WaitKey = async (kode: string = "keyb"): Promise<void> => {
 	return new Promise((resolve, _reject) => {
 		let check = (): void => {
 			setTimeout(() => {
-				if (InputHit('keyb', kode)) {
+				if (KeyHit(kode) > 0) {
 					resolve();
 				}
 			}, 0);
@@ -148,16 +103,23 @@ const WaitKey = async (kode: string = "keyb"): Promise<void> => {
 	})
 }
 
-
-
 /**
  * MOUSE
  */
+
+//Get Mouse Id of the last pressed mouse
 const GetMouse = (): number => {
-	return 0;
+	return parseInt(ha.blitz.input.mouse.key);
 }
 
-const MouseHit = (): number => {
+//how many time mouse is hit
+const MouseHit = (button: number = -1): number => {
+	if (button == -1) {
+		//TODO:
+	}
+	else {
+		//TODO:
+	}
 	return 0;
 }
 

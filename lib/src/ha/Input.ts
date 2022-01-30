@@ -1,21 +1,110 @@
+//TODO: [ref] gak pakai blitz
 namespace ha.blitz {
 	class Input {
-		private _inputs: IInput[] = [];
-		private _touch: IInput;
-		private _mouse: IInput;
-		private _keyb: IInput;
+		private _inputs: IInput[] = [];	//any input,
+		private _touch: IInput;	//global touch
+		private _mouse: IInput;	//global mouse
+		private _keyb: IInput;	//global keyb
+		private _input: IInput;	//global input
 		private _event: Event = new Event();
 
 		constructor() {
 			this._touch = this.def();
 			this._mouse = this.def();
-			this.keyb = this.def();
+			this._keyb = this.def();
 
 			this._touch.type = 'touch';
-			this.keyb.type = 'keyb';
+			this._keyb.type = 'keyb';
 			this._mouse.type = 'mouse';
 		}
 
+		getKey(e: PointerEvent): string {
+			if (e.pointerType == 'touch') {
+				return e.pointerId + '';
+			}
+			else if (e.pointerType == 'mouse') {
+				return e.button + '';
+			}
+
+			throw Error('');
+		}
+
+		init(canvas: HTMLCanvasElement): void {
+
+			canvas.onpointerdown = (e: PointerEvent) => {
+				e.stopPropagation();
+				// e.preventDefault();
+
+				let pos: any = ha.blitz.input.pos(e.clientX, e.clientY, ha.blitz.main.canvasAktif.scaleX, ha.blitz.main.canvasAktif.scaleY);
+				let key: string = this.getKey(e);
+				let input: IInput = ha.blitz.input.baru(key, e.pointerType);
+
+				ha.blitz.input.event.down(input, key, e.pointerType, pos);
+				ha.blitz.input.event.down(this._input, key, e.pointerType, pos);
+				if ("mouse" == e.pointerType) ha.blitz.input.event.down(this._mouse, key, 'mouse', pos);
+				if ("touch" == e.pointerType) ha.blitz.input.event.down(this._touch, key, 'touch', pos);
+			}
+
+			canvas.onpointermove = (e: PointerEvent) => {
+				e.stopPropagation();
+
+				let input: IInput = this.baru(e.button + '', e.pointerType);
+
+				ha.blitz.input.event.move(input, e);
+				ha.blitz.input.event.move(this.input, e);
+				if (e.pointerType == 'touch') ha.blitz.input.event.move(ha.blitz.input.touch, e);
+				if (e.pointerType == 'mouse') ha.blitz.input.event.move(ha.blitz.input.mouse, e);
+			}
+
+			canvas.onpointerout = (e: PointerEvent) => {
+				e.stopPropagation();
+
+				let input: IInput = ha.blitz.input.baru(e.button + '', e.pointerType);
+
+				ha.blitz.input.event.up(input, e);
+				ha.blitz.input.event.up(this.input, e);
+				if (e.pointerType == 'touch') ha.blitz.input.event.up(ha.blitz.input.touch, e);
+				if (e.pointerType == 'mouse') ha.blitz.input.event.up(ha.blitz.input.mouse, e);
+			}
+
+			canvas.onpointercancel = (e: PointerEvent) => {
+				e.stopPropagation();
+				e.preventDefault();
+			}
+
+			canvas.onpointerup = (e: PointerEvent) => {
+				e.stopPropagation();
+
+				let input: IInput = ha.blitz.input.baru(e.button + '', e.pointerType);
+
+				ha.blitz.input.event.up(input, e);
+				ha.blitz.input.event.up(this.input, e);
+				if (e.pointerType == 'touch') ha.blitz.input.event.up(ha.blitz.input.touch, e);
+				if (e.pointerType == 'mouse') ha.blitz.input.event.up(ha.blitz.input.mouse, e);
+			}
+
+			//TODO: keyboard dimasukkan ke global input
+			window.onkeydown = (e: KeyboardEvent) => {
+				e.stopPropagation();
+				// e.preventDefault();
+
+				let input: IInput = ha.blitz.input.baru(e.key + '', 'keyb');
+				ha.blitz.input.event.keyDown(input, e);
+				// ha.blitz.input.event.keyDown(blitzConf.input, e);
+			};
+
+			window.onkeyup = (e: KeyboardEvent) => {
+				e.stopPropagation();
+
+				let input: IInput = ha.blitz.input.baru(e.key + '', 'keyb');
+				ha.blitz.input.event.keyUp(input, e);
+				// ha.blitz.input.event.keyUp(blitzConf.input, e);
+			}
+
+			window.onresize = async (): Promise<void> => {
+				ha.blitz.main.windowResize();
+			}
+		}
 
 		def(): IInput {
 			return {
@@ -33,7 +122,8 @@ namespace ha.blitz {
 				xStart: 0,
 				y: 0,
 				yDrag: 0,
-				yStart: 0
+				yStart: 0,
+				hit: 0
 			}
 		}
 
@@ -59,14 +149,34 @@ namespace ha.blitz {
 			while (this.inputs.length > 0) {
 				this.inputs.pop();
 			}
+			this.flushByInput(this._input);
+			this.flushByInput(this._mouse);
+			this.flushByInput(this._touch);
+			this.flushByInput(this._keyb);
 		}
 
-		get(e: string, inputType: string): IInput {
+		flushByType(type: string): void {
+			this._inputs.forEach((input: IInput) => {
+				if (type == input.type) {
+					this.flushByInput(input);
+				}
+			});
+		}
+
+		flushByInput(input: IInput): void {
+			input.isDown = false;
+			input.isDrag = false;
+			input.isHit = false;
+			input.isTap = false;
+			input.hit = 0;
+		}
+
+		get(key: string, inputType: string): IInput {
 			let inputBaru: IInput;
 
 			for (let i: number = 0; i < this.inputs.length; i++) {
 				let input: IInput = this.inputs[i];
-				if (input.type == inputType && input.key == e) {
+				if (input.type == inputType && input.key == key) {
 					inputBaru = input;
 					return inputBaru;
 				}
@@ -96,7 +206,8 @@ namespace ha.blitz {
 					y: 0,
 					yDrag: 0,
 					yStart: 0,
-					id: 0
+					id: 0,
+					hit: 0
 				}
 
 				this.inputs.push(inputBaru);
@@ -107,8 +218,8 @@ namespace ha.blitz {
 			return inputBaru;
 		}
 
-		BLGetInputPos = (cx: number, cy: number, canvasScaleX: number, canvasScaleY: number) => {
-			let rect: DOMRect = ha.blitz.blWindow.canvasAktif.canvas.getBoundingClientRect();
+		pos = (cx: number, cy: number, canvasScaleX: number, canvasScaleY: number) => {
+			let rect: DOMRect = ha.blitz.main.canvasAktif.canvas.getBoundingClientRect();
 			let poslx: number = Math.floor((cx - rect.x) / canvasScaleX);
 			let posly: number = Math.floor((cy - rect.y) / canvasScaleY);
 
@@ -137,14 +248,16 @@ namespace ha.blitz {
 		public get keyb(): IInput {
 			return this._keyb;
 		}
-		public set keyb(value: IInput) {
-			this._keyb = value;
+
+		public get input(): IInput {
+			return this._input;
 		}
+
 	}
 
 	class Event {
 		move(input: IInput, e: PointerEvent): void {
-			let pos: any = ha.blitz.input.BLGetInputPos(e.clientX, e.clientY, ha.blitz.blWindow.canvasAktif.scaleX, ha.blitz.blWindow.canvasAktif.scaleY);
+			let pos: any = ha.blitz.input.pos(e.clientX, e.clientY, ha.blitz.main.canvasAktif.scaleX, ha.blitz.main.canvasAktif.scaleY);
 			input.x = pos.x;
 			input.y = pos.y;
 			input.id = e.pointerId;
@@ -156,7 +269,8 @@ namespace ha.blitz {
 			}
 		}
 
-		down(input: IInput, e: PointerEvent, pos: any): void {
+		//TODO: parameter lebih universal mewakili keyboard an mouse
+		down(input: IInput, key: string, type: string, pos: any): void {
 			input.xStart = pos.x
 			input.yStart = pos.y;
 			input.x = pos.x;
@@ -165,9 +279,11 @@ namespace ha.blitz {
 			input.isTap = false;
 			input.isDrag = false;
 			input.isHit = true;
-			input.key = e.button + '';
-			input.type = e.pointerType;
+			input.key = key;
+			input.type = type;
 			input.timerStart = Date.now();
+			input.hit++;
+			// input.id = e.pointerId;
 		}
 
 		up(input2: IInput, e: PointerEvent): void {

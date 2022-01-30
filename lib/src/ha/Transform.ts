@@ -1,4 +1,6 @@
 namespace ha {
+
+	//TODO: disederhanakan
 	class Transform {
 		readonly RAD2DEG: number = 180.0 / Math.PI;
 		readonly DEG2RAD: number = Math.PI / 180.0;
@@ -151,6 +153,7 @@ namespace ha {
 			}
 		}
 
+		//TODO: dihapus
 		vectorTo(x: number, y: number, xt: number, yt: number): IV2D {
 			let pjx: number = xt - x;
 			let pjy: number = yt - y;
@@ -164,6 +167,7 @@ namespace ha {
 			}
 		}
 
+		//TODO: disederhanakan
 		moveTo(x: number, y: number, xt: number, yt: number, clamp: number): void {
 			let pjx: number = xt - x;
 			let pjy: number = yt - y;
@@ -174,6 +178,7 @@ namespace ha {
 			this._lastY = y + perb * pjy;
 		}
 
+		//TODO: disederhanakan
 		moveFrom(x: number = 0, y: number = 0, xt: number = 0, yt: number = 0, v: number = 0): IV2D {
 			let pjx: number = xt - x;
 			let pjy: number = yt - y;
@@ -189,23 +194,27 @@ namespace ha {
 			}
 		}
 
+		//TODO: disederhankan, dimulai dari 0
 		dist(x: number, y: number, xt: number, yt: number): number {
 			let pjx: number = xt - x;
 			let pjy: number = yt - y;
 			return Math.sqrt(pjx * pjx + pjy * pjy);
 		}
 
+		//TODO: dihapus
 		rotateFrom(x: number, y: number, tx: number, ty: number, rotNow: number): number {
 			let angle: number = this.deg(tx - x, ty - y);
 			let angleMin: number = this.degMaxDist(rotNow, angle);
 			return angleMin;
 		}
 
+		//TODO: dihapus
 		rotateTo(x: number, y: number, tx: number = 0, ty: number = 0, rotNow: number = 0): number {
 			let angle: number = this.deg(tx - x, ty - y);
 			let angleMin: number = this.degMinDist(rotNow, angle);
 			return angleMin;
 		}
+
 
 		rotateRel(x: number = 0, y: number = 0, xt: number = 0, yt: number = 0, deg: number = 10): void {
 			let xr: number = x - xt;

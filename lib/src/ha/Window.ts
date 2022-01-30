@@ -1,6 +1,6 @@
 namespace ha.blitz {
 
-	class BlWindow {
+	class Main {
 		private _fps: number = 1000 / 30;
 		private _origin: IV2D;
 		private _canvasAr: IBuffer[] = [];
@@ -34,15 +34,15 @@ namespace ha.blitz {
 			canvas = this.buatCanvas('front-buffer');
 			this._canvasAr.push(canvas);
 
-			ha.blitz.blWindow.canvasAktif = canvas;
+			ha.blitz.main.canvasAktif = canvas;
 		}
 
 		windowResize = (): void => {
 			// console.debug('window on resize');
-			let canvas: HTMLCanvasElement = ha.blitz.blWindow._canvasAktif.canvas;
+			let canvas: HTMLCanvasElement = ha.blitz.main._canvasAktif.canvas;
 
-			let cp = ha.blitz.blWindow._canvasAktif.canvas.width;
-			let cl = ha.blitz.blWindow._canvasAktif.canvas.height;
+			let cp = ha.blitz.main._canvasAktif.canvas.width;
+			let cl = ha.blitz.main._canvasAktif.canvas.height;
 
 			let wp = window.innerWidth;
 			let wl = window.innerHeight;
@@ -52,8 +52,8 @@ namespace ha.blitz {
 			let cp2 = Math.floor(cp * ratio);
 			let cl2 = Math.floor(cl * ratio);
 
-			ha.blitz.blWindow._canvasAktif.scaleX = ratio;
-			ha.blitz.blWindow._canvasAktif.scaleY = ratio;
+			ha.blitz.main._canvasAktif.scaleX = ratio;
+			ha.blitz.main._canvasAktif.scaleY = ratio;
 
 			canvas.style.width = cp2 + 'px';
 			canvas.style.height = cl2 + 'px';
@@ -76,7 +76,7 @@ namespace ha.blitz {
 				.then(() => {
 					setTimeout(() => {
 						requestAnimationFrame(this.repeat);
-					}, ha.blitz.blWindow._fps);
+					}, ha.blitz.main._fps);
 				}).
 				catch((e) => {
 					console.error(e);
@@ -114,6 +114,5 @@ namespace ha.blitz {
 
 	}
 
-
-	export var blWindow: BlWindow = new BlWindow();
+	export var main: Main = new Main();
 }
