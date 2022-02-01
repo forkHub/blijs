@@ -12,7 +12,7 @@ const Prompt = (m: string, def: string): string => {
 }
 
 const InputHit = (): boolean => {
-	return ha.blitz.input.input.isHit; //TODO:
+	return ha.blitz.input.inputGlobal.isHit; //TODO:
 }
 
 const WaitInput = async (): Promise<void> => {
@@ -33,19 +33,19 @@ const WaitInput = async (): Promise<void> => {
 }
 
 const InputX = () => {
-	return ha.blitz.input.input.x;
+	return ha.blitz.input.inputGlobal.x;
 }
 
 const InputY = () => {
-	return ha.blitz.input.input.y;
+	return ha.blitz.input.inputGlobal.y;
 }
 
 const InputDragX = (): number => {
-	return ha.blitz.input.input.yDrag
+	return ha.blitz.input.inputGlobal.yDrag
 }
 
 const InputDragY = (): number => {
-	return ha.blitz.input.input.xDrag
+	return ha.blitz.input.inputGlobal.xDrag
 }
 
 const FlushInput = () => {
@@ -53,54 +53,68 @@ const FlushInput = () => {
 }
 
 const InputDown = (): boolean => {
-	return ha.blitz.input.input.isDown;
+	return ha.blitz.input.inputGlobal.isDown;
 }
 
 const InputDrag = (): boolean => {
-	return ha.blitz.input.input.isDrag;
+	return ha.blitz.input.inputGlobal.isDrag;
 }
 
 /**
  * 	KEYBOARD
  */
 const FlushKeys = () => {
-	ha.blitz.input.flushByInput(ha.blitz.input.keyb);
+	ha.blitz.input.flushByInput(ha.blitz.input.keybGlobal);
 	ha.blitz.input.flushByType('keyb');
 }
 
 const GetKey = (): string => {
-	return ha.blitz.input.keyb.key;
+	return ha.blitz.input.keybGlobal.key;
 }
 
 const KeyIsDown = (key: string = ''): boolean => {
 	if ("" == key) {
-		return ha.blitz.input.keyb.isDown;
+		return ha.blitz.input.keybGlobal.isDown;
 	}
 	else {
-		return false;//TODO:
+		let input: IInput = ha.blitz.input.getInput(key, 'keyb');
+		if (input) {
+			return input.isDown;
+		}
+
+		return false;
 	}
 }
 
 const KeyHit = (key: string = ''): number => {
 	if ("" == key) {
-		return 1;	//TODO:
+		let n: number = ha.blitz.input.keybGlobal.hit;
+		ha.blitz.input.keybGlobal.hit = 0;
+		return (n);
 	}
 	else {
-		return 0; //TODO:
+		let input: IInput = ha.blitz.input.getInput(key, 'keyb');
+		let n: number = 0;
+
+		if (input) {
+			n = input.hit;
+			input.hit = 0;
+		}
+
+		return n;
 	}
 }
 
-const WaitKey = async (kode: string = "keyb"): Promise<void> => {
-	return new Promise((resolve, _reject) => {
-		let check = (): void => {
-			setTimeout(() => {
-				if (KeyHit(kode) > 0) {
-					resolve();
-				}
-			}, 0);
-		}
-		check();
-	})
+const WaitKey = async (kode: string = ""): Promise<void> => {
+	console.log('wait key: ' + kode);
+	let ulang: boolean = true;
+
+	while (ulang) {
+		if (KeyHit(kode) > 0) ulang = false;
+		await Delay(30);
+	}
+
+	console.log('wait key end');
 }
 
 /**
@@ -109,7 +123,7 @@ const WaitKey = async (kode: string = "keyb"): Promise<void> => {
 
 //Get Mouse Id of the last pressed mouse
 const GetMouse = (): number => {
-	return parseInt(ha.blitz.input.mouse.key);
+	return parseInt(ha.blitz.input.mouseGlobal.key);
 }
 
 //how many time mouse is hit

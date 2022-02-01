@@ -15,14 +15,14 @@ namespace ha {
 			return this._lastY;
 		}
 
-		clamp(n: number, m: number): number {
-			let m2 = Math.abs(m);
-			let n2 = Math.abs(n);
-			let h = Math.min(n2, m2);
+		// clamp(n: number, m: number): number {
+		// 	let m2 = Math.abs(m);
+		// 	let n2 = Math.abs(n);
+		// 	let h = Math.min(n2, m2);
 
-			if (n >= 0) return h;
-			return -h;
-		}
+		// 	if (n >= 0) return h;
+		// 	return -h;
+		// }
 
 		equal(n1: number, n2: number, tol: number = 1): boolean {
 			if (Math.abs(n1 - n2) <= tol) return true;
@@ -30,40 +30,78 @@ namespace ha {
 			return false;
 		}
 
-		quadDeg(x: number, y: number): number {
-			// console.log('quad x: ' + x + '/y: ' + y);
+		quadDeg2(x: number, y: number, deg: number): number {
 			if (x == 0) {
-				if (y >= 0) {
-					return 0;
+				if (y == 0) {
+					return deg;
 				}
-				else {
-					return 0;
+				else if (y > 0) {
+					return deg;
+				}
+				else if (y < 0) {
+					return 360 - Math.abs(deg);
 				}
 			}
 			else if (x > 0) {
-				if (y >= 0) {
-					return 0;
+				if (y == 0) {
+					return deg;
 				}
-				else {
-					return 0;
+				else if (y > 0) {
+					return deg;
+				}
+				else if (y < 0) {
+					return 360 - Math.abs(deg);
 				}
 			}
 			else if (x < 0) {
-				if (y > 0) {
-					return 90;
-				}
-				else if (y == 0) {
+				if (y == 0) {
 					return 180;
 				}
-				else {
-					return -90;
+				else if (y > 0) {
+					return 180 - Math.abs(deg);
+				}
+				else if (y < 0) {
+					return 180 + Math.abs(deg);
 				}
 			}
-			else {
-				console.log("error x :" + x + '/y: ' + y);
-				throw Error('');
-			}
+
+			throw Error();
 		}
+
+		// quadDeg(x: number, y: number): number {
+		// 	// console.log('quad x: ' + x + '/y: ' + y);
+		// 	if (x == 0) {
+		// 		if (y >= 0) {
+		// 			return 0;
+		// 		}
+		// 		else {
+		// 			return 0;
+		// 		}
+		// 	}
+		// 	else if (x > 0) {
+		// 		if (y >= 0) {
+		// 			return 0;
+		// 		}
+		// 		else {
+		// 			return 0;
+		// 		}
+		// 	}
+		// 	else if (x < 0) {
+		// 		if (y > 0) {
+		// 			return 90;
+		// 		}
+		// 		else if (y == 0) {
+		// 			return 180;
+		// 		}
+		// 		else {
+		// 			return -90;
+		// 		}
+		// 	}
+		// 	else {
+		// 		console.log("error x :" + x + '/y: ' + y);
+		// 		throw Error('');
+		// 	}
+		// }
 
 		deg(x: number, y: number): number {
 			let l: number;
@@ -77,9 +115,15 @@ namespace ha {
 			s = y / l;
 			s = Math.asin(s);
 			s *= this.RAD2DEG;
+			// console.log('sudut ' + s);
 
-			s = s + ha.trans.quadDeg(x, y);
+			s = ha.trans.quadDeg2(x, y, s);
+			// console.log('quad ' + s);
+
+			// s = s + q;
 			s = this.normalizeDeg(s);
+
+			// console.log('deg x: ' + x + '/y: ' + y + '/hasil: ' + s);
 
 			return s;
 		}
@@ -154,45 +198,45 @@ namespace ha {
 		}
 
 		//TODO: dihapus
-		vectorTo(x: number, y: number, xt: number, yt: number): IV2D {
-			let pjx: number = xt - x;
-			let pjy: number = yt - y;
+		// vectorTo(x: number, y: number, xt: number, yt: number): IV2D {
+		// 	let pjx: number = xt - x;
+		// 	let pjy: number = yt - y;
 
-			this._lastX = pjx;
-			this._lastY = pjy;
+		// 	this._lastX = pjx;
+		// 	this._lastY = pjy;
 
-			return {
-				x: pjx,
-				y: pjy
-			}
-		}
-
-		//TODO: disederhanakan
-		moveTo(x: number, y: number, xt: number, yt: number, clamp: number): void {
-			let pjx: number = xt - x;
-			let pjy: number = yt - y;
-			let pj: number = this.dist(x, y, xt, yt);
-			let perb: number = Math.abs(clamp) / pj;
-
-			this._lastX = x + perb * pjx;
-			this._lastY = y + perb * pjy;
-		}
+		// 	return {
+		// 		x: pjx,
+		// 		y: pjy
+		// 	}
+		// }
 
 		//TODO: disederhanakan
-		moveFrom(x: number = 0, y: number = 0, xt: number = 0, yt: number = 0, v: number = 0): IV2D {
-			let pjx: number = xt - x;
-			let pjy: number = yt - y;
-			let pj: number = this.dist(x, y, xt, yt);
-			let perb: number = Math.abs(v) / pj;
+		// moveTo(x: number, y: number, xt: number, yt: number, clamp: number): void {
+		// 	let pjx: number = xt - x;
+		// 	let pjy: number = yt - y;
+		// 	let pj: number = this.dist(x, y, xt, yt);
+		// 	let perb: number = Math.abs(clamp) / pj;
 
-			this._lastX = perb * -pjx;
-			this._lastY = perb * -pjy;
+		// 	this._lastX = x + perb * pjx;
+		// 	this._lastY = y + perb * pjy;
+		// }
 
-			return {
-				x: this._lastX,
-				y: this._lastY
-			}
-		}
+		//TODO: disederhanakan
+		// moveFrom(x: number = 0, y: number = 0, xt: number = 0, yt: number = 0, v: number = 0): IV2D {
+		// 	let pjx: number = xt - x;
+		// 	let pjy: number = yt - y;
+		// 	let pj: number = this.dist(x, y, xt, yt);
+		// 	let perb: number = Math.abs(v) / pj;
+
+		// 	this._lastX = perb * -pjx;
+		// 	this._lastY = perb * -pjy;
+
+		// 	return {
+		// 		x: this._lastX,
+		// 		y: this._lastY
+		// 	}
+		// }
 
 		//TODO: disederhankan, dimulai dari 0
 		dist(x: number, y: number, xt: number, yt: number): number {
@@ -200,21 +244,6 @@ namespace ha {
 			let pjy: number = yt - y;
 			return Math.sqrt(pjx * pjx + pjy * pjy);
 		}
-
-		//TODO: dihapus
-		rotateFrom(x: number, y: number, tx: number, ty: number, rotNow: number): number {
-			let angle: number = this.deg(tx - x, ty - y);
-			let angleMin: number = this.degMaxDist(rotNow, angle);
-			return angleMin;
-		}
-
-		//TODO: dihapus
-		rotateTo(x: number, y: number, tx: number = 0, ty: number = 0, rotNow: number = 0): number {
-			let angle: number = this.deg(tx - x, ty - y);
-			let angleMin: number = this.degMinDist(rotNow, angle);
-			return angleMin;
-		}
-
 
 		rotateRel(x: number = 0, y: number = 0, xt: number = 0, yt: number = 0, deg: number = 10): void {
 			let xr: number = x - xt;
@@ -241,17 +270,33 @@ namespace ha {
 			// console.groupEnd();
 		}
 
-		moveByDeg(speed: number = 10, deg: number = 10): IV2D {
-			deg *= this.DEG2RAD;
+		//TODO: dihapus
+		// rotateFrom(x: number, y: number, tx: number, ty: number, rotNow: number): number {
+		// 	let angle: number = this.deg(tx - x, ty - y);
+		// 	let angleMin: number = this.degMaxDist(rotNow, angle);
+		// 	return angleMin;
+		// }
 
-			this._lastX = Math.cos(deg) * speed;
-			this._lastY = Math.sin(deg) * speed;
+		//TODO: dihapus
+		// rotateTo(x: number, y: number, tx: number = 0, ty: number = 0, rotNow: number = 0): number {
+		// 	let angle: number = this.deg(tx - x, ty - y);
+		// 	let angleMin: number = this.degMinDist(rotNow, angle);
+		// 	return angleMin;
+		// }
 
-			return {
-				x: this._lastX,
-				y: this._lastY
-			}
-		}
+
+
+		// moveByDeg(speed: number = 10, deg: number = 10): IV2D {
+		// 	deg *= this.DEG2RAD;
+
+		// 	this._lastX = Math.cos(deg) * speed;
+		// 	this._lastY = Math.sin(deg) * speed;
+
+		// 	return {
+		// 		x: this._lastX,
+		// 		y: this._lastY
+		// 	}
+		// }
 
 	}
 

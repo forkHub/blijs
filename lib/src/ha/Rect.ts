@@ -18,6 +18,43 @@ namespace ha {
 			return r;
 		}
 
+		rotate(r: IRect, deg: number, xc: number = 0, yc: number): void {
+
+			r.vs.forEach((p: IV2D) => {
+				ha.point.rotateRel(p, xc, yc, deg);
+			});
+
+
+		};
+
+		copy(r: IRect): IRect {
+			return ha.rect.create(r.vs[0].x, r.vs[0].y, r.vs[3].x, r.vs[3].y);
+		}
+
+		collideBound(r1: IRect, r2: IRect): boolean {
+			if (this.maxX(r1) < this.minX(r2)) return false;
+			if (this.minX(r1) > this.maxX(r2)) return false;
+			if (this.maxY(r1) < this.minY(r2)) return false;
+			if (this.minY(r1) > this.maxY(r2)) return false;
+
+			return true;
+		}
+
+		collide(r1: IRect, r2: IRect): boolean {
+			let bound: boolean = this.collideBound(r1, r2);
+			if (!bound) return false;
+
+			for (let i: number = 0; i < r1.segs.length; i++) {
+				for (let j: number = 0; j < r2.segs.length; j++) {
+					if (ha.segment.collide(r1.segs[i], r2.segs[j])) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
 		minX(r: IRect): number {
 			let x: number = r.vs[0].y;
 
@@ -57,13 +94,6 @@ namespace ha {
 
 			return y;
 		}
-
-		rotateToHor(r: IRect): void {
-			//TODO:
-			r;
-		}
-
-
 	}
 
 	export var rect: Rect = new Rect();
