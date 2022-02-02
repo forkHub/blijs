@@ -22,7 +22,8 @@ var ha;
                     handleY: 0,
                     img: null,
                     isAnim: false,
-                    rotation: 0
+                    rotation: 0,
+                    rect: ha.rect.create()
                 };
                 return canvas;
             }
@@ -377,6 +378,7 @@ const CreateImage = (w = 32, h = 32, frameW = 32, frameH = 32) => {
     let img;
     canvas.width = w;
     canvas.height = h;
+    let rect = ha.rect.create(0, 0, frameW, frameH);
     img = {
         width: w,
         height: h,
@@ -390,7 +392,8 @@ const CreateImage = (w = 32, h = 32, frameW = 32, frameH = 32) => {
         scaleX: 1,
         scaleY: 1,
         canvas: canvas,
-        ctx: canvas.getContext('2d')
+        ctx: canvas.getContext('2d'),
+        rect: rect
     };
     return img;
 };
@@ -437,7 +440,10 @@ const ImageHeight = (img) => { return img.frameH * img.scaleY; };
 const ImageXHandle = (img) => { return img.handleX; };
 const ImageYHandle = (img) => { return img.handleY; };
 const ImageOverlap = () => { };
-const ImageColRect = () => { };
+const ImageCollide = (img1, img2) => {
+    img1;
+    img2;
+};
 const ImageRectOverlap = () => { };
 const MidHandle = (img) => {
     img.handleX = Math.floor((img.frameW * img.scaleX) / 2);
@@ -447,9 +453,11 @@ const LoadImage = async (url) => {
     let img = await ha.blitz.image.loadImage(url);
     let canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d');
+    let rect;
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
     ctx.drawImage(img, 0, 0);
+    rect = ha.rect.create(0, 0, img.naturalWidth, img.naturalHeight);
     return {
         img: img,
         width: img.naturalWidth,
@@ -463,22 +471,25 @@ const LoadImage = async (url) => {
         scaleX: 1,
         scaleY: 1,
         ctx: ctx,
-        canvas: canvas
+        canvas: canvas,
+        rect: rect
     };
 };
-const LoadAnimImage = async (url, w = 32, h = 32) => {
+const LoadAnimImage = async (url, fw = 32, fh = 32) => {
     let img = await ha.blitz.image.loadImage(url);
     let canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d');
+    let rect;
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
     ctx.drawImage(img, 0, 0);
+    rect = ha.rect.create(0, 0, fw, fh);
     return {
         img: img,
         width: img.naturalWidth,
         height: img.naturalHeight,
-        frameH: w,
-        frameW: h,
+        frameH: fw,
+        frameW: fh,
         isAnim: true,
         handleX: 0,
         handleY: 0,
@@ -486,7 +497,8 @@ const LoadAnimImage = async (url, w = 32, h = 32) => {
         scaleX: 1,
         scaleY: 1,
         ctx: ctx,
-        canvas: canvas
+        canvas: canvas,
+        rect: rect
     };
 };
 const TileImage = (img, x = 0, y = 0, frame = 0) => {
@@ -876,6 +888,10 @@ var ha;
                 y: y
             };
         }
+        copyInfo(p1, p2) {
+            p2.x = p1.x;
+            p2.y = p1.y;
+        }
         copy(p) {
             let h = this.create(p.x, p.y);
             return h;
@@ -902,13 +918,13 @@ var ha;
 var ha;
 (function (ha) {
     class Rect {
-        create(x1, y1, x2, y2) {
+        create(x1 = 0, y1 = 0, x2 = 0, y2 = 0) {
             let r = {};
             r.vs = [];
             r.vs.push(ha.point.create(x1, y1));
             r.vs.push(ha.point.create(x2, y1));
-            r.vs.push(ha.point.create(x1, y2));
             r.vs.push(ha.point.create(x2, y2));
+            r.vs.push(ha.point.create(x1, y2));
             r.segs = [];
             r.segs.push(ha.segment.createSeg(r.vs[0], r.vs[1]));
             r.segs.push(ha.segment.createSeg(r.vs[1], r.vs[2]));
@@ -916,24 +932,37 @@ var ha;
             r.segs.push(ha.segment.createSeg(r.vs[3], r.vs[0]));
             return r;
         }
+        translate(rect, x, y) {
+            rect.segs.forEach((seg) => {
+                ha.segment.translate(seg, x, y);
+            });
+        }
         rotate(r, deg, xc = 0, yc) {
             r.vs.forEach((p) => {
                 ha.point.rotateRel(p, xc, yc, deg);
             });
         }
-        ;
         copy(r) {
             return ha.rect.create(r.vs[0].x, r.vs[0].y, r.vs[3].x, r.vs[3].y);
         }
+        copyInfo(r1, r2) {
+            for (let i = 0; i < r1.segs.length; i++) {
+                ha.segment.copyInfo(r1.segs[i], r2.segs[i]);
+            }
+        }
         collideBound(r1, r2) {
-            if (this.maxX(r1) < this.minX(r2))
+            if (this.maxX(r1) < this.minX(r2)) {
                 return false;
-            if (this.minX(r1) > this.maxX(r2))
+            }
+            if (this.minX(r1) > this.maxX(r2)) {
                 return false;
-            if (this.maxY(r1) < this.minY(r2))
+            }
+            if (this.maxY(r1) < this.minY(r2)) {
                 return false;
-            if (this.minY(r1) > this.maxY(r2))
+            }
+            if (this.minY(r1) > this.maxY(r2)) {
                 return false;
+            }
             return true;
         }
         collide(r1, r2) {
@@ -950,18 +979,18 @@ var ha;
             return false;
         }
         minX(r) {
-            let x = r.vs[0].y;
+            let x = r.vs[0].x;
             r.vs.forEach((item) => {
-                if (item.y < x)
-                    x = item.y;
+                if (item.x < x)
+                    x = item.x;
             });
             return x;
         }
         maxX(r) {
-            let x = r.vs[0].y;
+            let x = r.vs[0].x;
             r.vs.forEach((item) => {
-                if (item.y > x)
-                    x = item.y;
+                if (item.x > x)
+                    x = item.x;
             });
             return x;
         }
@@ -1013,6 +1042,8 @@ var ha;
             let deg = this.deg(seg2);
             this.rotate(seg2Copy, -deg, seg2.v1.x, seg2.v1.y);
             this.rotate(seg1Copy, -deg, seg2.v1.x, seg2.v1.y);
+            if (!this.boundCollide(seg1Copy, seg2Copy))
+                return false;
             this.translate(seg1Copy, -seg2.v1.x, -seg2.v1.y);
             this.translate(seg2Copy, -seg2.v1.x, -seg2.v1.y);
             if (!this.crossHor(seg1Copy)) {
@@ -1025,6 +1056,10 @@ var ha;
             if (x < this.minX(seg2Copy))
                 return false;
             return true;
+        }
+        copyInfo(seg1, seg2) {
+            ha.point.copyInfo(seg1.v1, seg2.v2);
+            ha.point.copyInfo(seg1.v2, seg2.v2);
         }
         copy(seg) {
             return {
