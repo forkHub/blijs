@@ -48,6 +48,11 @@ namespace ha {
 		// 	return ha.point.create(h, v);
 		// }
 
+		copyInfo(p1: IV2D, p2: IV2D): void {
+			p2.x = p1.x;
+			p2.y = p1.y;
+		}
+
 		copy(p: IV2D): IV2D {
 			let h: IV2D = this.create(p.x, p.y);
 			return h;

@@ -29,6 +29,8 @@ namespace ha {
 			this.rotate(seg2Copy, -deg, seg2.v1.x, seg2.v1.y);
 			this.rotate(seg1Copy, -deg, seg2.v1.x, seg2.v1.y);
 
+			if (!this.boundCollide(seg1Copy, seg2Copy)) return false;
+
 			this.translate(seg1Copy, -seg2.v1.x, -seg2.v1.y);
 			this.translate(seg2Copy, -seg2.v1.x, -seg2.v1.y);
 
@@ -43,6 +45,11 @@ namespace ha {
 			if (x < this.minX(seg2Copy)) return false;
 
 			return true;
+		}
+
+		copyInfo(seg1: ISegment, seg2: ISegment): void {
+			ha.point.copyInfo(seg1.v1, seg2.v2);
+			ha.point.copyInfo(seg1.v2, seg2.v2);
 		}
 
 		copy(seg: ISegment): ISegment {

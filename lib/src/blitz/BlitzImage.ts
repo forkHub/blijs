@@ -13,6 +13,8 @@ const CreateImage = (w: number = 32, h: number = 32, frameW: number = 32, frameH
 	canvas.width = w;
 	canvas.height = h;
 
+	let rect: IRect = ha.rect.create(0, 0, frameW, frameH);
+
 	img = {
 		width: w,
 		height: h,
@@ -26,7 +28,8 @@ const CreateImage = (w: number = 32, h: number = 32, frameW: number = 32, frameH
 		scaleX: 1,
 		scaleY: 1,
 		canvas: canvas,
-		ctx: canvas.getContext('2d')
+		ctx: canvas.getContext('2d'),
+		rect: rect
 	}
 
 	return img;
@@ -42,6 +45,7 @@ const DrawImage = (img: IBuffer, x: number = 0, y: number = 0, frame: number = 0
 	let jmlV: number;
 	let frameX: number;
 	let frameY: number;
+	// let rect: IRect = img.rect;
 
 	jmlH = Math.floor(img.width / img.frameW);
 	jmlV = Math.floor(img.height / img.frameH);
@@ -93,7 +97,12 @@ const ImageYHandle = (img: IBuffer): number => { return img.handleY; };
 
 //TODO:
 const ImageOverlap = () => { };
-const ImageColRect = () => { };
+
+const ImageCollide = (img1: IBuffer, img2: IBuffer) => {
+	img1;
+	img2;
+};
+
 const ImageRectOverlap = () => { }
 
 const MidHandle = (img: IBuffer) => {
@@ -105,10 +114,13 @@ const LoadImage = async (url: string): Promise<IBuffer> => {
 	let img: HTMLImageElement = await ha.blitz.image.loadImage(url);
 	let canvas: HTMLCanvasElement = document.createElement('canvas');
 	let ctx: CanvasRenderingContext2D = canvas.getContext('2d');
+	let rect: IRect;
 
 	canvas.width = img.naturalWidth;
 	canvas.height = img.naturalHeight;
 	ctx.drawImage(img, 0, 0);
+
+	rect = ha.rect.create(0, 0, img.naturalWidth, img.naturalHeight);
 
 	return {
 		img: img,
@@ -125,25 +137,29 @@ const LoadImage = async (url: string): Promise<IBuffer> => {
 		scaleX: 1,
 		scaleY: 1,
 		ctx: ctx,
-		canvas: canvas
+		canvas: canvas,
+		rect: rect
 	}
 }
 
-const LoadAnimImage = async (url: string, w: number = 32, h: number = 32): Promise<IBuffer> => {
+const LoadAnimImage = async (url: string, fw: number = 32, fh: number = 32): Promise<IBuffer> => {
 	let img: HTMLImageElement = await ha.blitz.image.loadImage(url);
 	let canvas: HTMLCanvasElement = document.createElement('canvas');
 	let ctx: CanvasRenderingContext2D = canvas.getContext('2d');
+	let rect: IRect;
 
 	canvas.width = img.naturalWidth;
 	canvas.height = img.naturalHeight;
 	ctx.drawImage(img, 0, 0);
 
+	rect = ha.rect.create(0, 0, fw, fh);
+
 	return {
 		img: img,
 		width: img.naturalWidth,
 		height: img.naturalHeight,
-		frameH: w,
-		frameW: h,
+		frameH: fw,
+		frameW: fh,
 		// width2: w,
 		// height2: h,
 		isAnim: true,
@@ -153,7 +169,8 @@ const LoadAnimImage = async (url: string, w: number = 32, h: number = 32): Promi
 		scaleX: 1,
 		scaleY: 1,
 		ctx: ctx,
-		canvas: canvas
+		canvas: canvas,
+		rect: rect
 	}
 }
 

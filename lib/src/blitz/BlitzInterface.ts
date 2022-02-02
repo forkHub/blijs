@@ -78,6 +78,7 @@ interface IBuffer {
 	isAnim: boolean;
 	canvas: HTMLCanvasElement;
 	ctx: CanvasRenderingContext2D;
+	rect: IRect
 }
 
 //geom

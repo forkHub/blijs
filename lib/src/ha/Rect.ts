@@ -1,13 +1,13 @@
 namespace ha {
 	class Rect {
 
-		create(x1: number, y1: number, x2: number, y2: number): IRect {
+		create(x1: number = 0, y1: number = 0, x2: number = 0, y2: number = 0): IRect {
 			let r: IRect = {}
 			r.vs = [];
 			r.vs.push(ha.point.create(x1, y1));
 			r.vs.push(ha.point.create(x2, y1));
-			r.vs.push(ha.point.create(x1, y2));
 			r.vs.push(ha.point.create(x2, y2));
+			r.vs.push(ha.point.create(x1, y2));
 
 			r.segs = [];
 			r.segs.push(ha.segment.createSeg(r.vs[0], r.vs[1]));
@@ -18,6 +18,12 @@ namespace ha {
 			return r;
 		}
 
+		translate(rect: IRect, x: number, y: number): void {
+			rect.segs.forEach((seg: ISegment) => {
+				ha.segment.translate(seg, x, y);
+			})
+		}
+
 		rotate(r: IRect, deg: number, xc: number = 0, yc: number): void {
 
 			r.vs.forEach((p: IV2D) => {
@@ -25,17 +31,43 @@ namespace ha {
 			});
 
 
-		};
+		}
 
 		copy(r: IRect): IRect {
 			return ha.rect.create(r.vs[0].x, r.vs[0].y, r.vs[3].x, r.vs[3].y);
 		}
 
+		copyInfo(r1: IRect, r2: IRect): void {
+			for (let i: number = 0; i < r1.segs.length; i++) {
+				ha.segment.copyInfo(r1.segs[i], r2.segs[i]);
+			}
+		}
+
 		collideBound(r1: IRect, r2: IRect): boolean {
-			if (this.maxX(r1) < this.minX(r2)) return false;
-			if (this.minX(r1) > this.maxX(r2)) return false;
-			if (this.maxY(r1) < this.minY(r2)) return false;
-			if (this.minY(r1) > this.maxY(r2)) return false;
+			// console.debug('collide bound');
+
+			if (this.maxX(r1) < this.minX(r2)) {
+				// console.debug('maxX gagal');
+				return false;
+			}
+
+			// console.log('maxx ' + this.maxX(r1));
+			// console.log('minx ' + this.minX(r2));
+
+			if (this.minX(r1) > this.maxX(r2)) {
+				// console.debug('min x gagal');
+				return false;
+			}
+
+			if (this.maxY(r1) < this.minY(r2)) {
+				// console.debug('max y gagal');
+				return false;
+			}
+
+			if (this.minY(r1) > this.maxY(r2)) {
+				// console.debug('min y gagal');
+				return false;
+			}
 
 			return true;
 		}
@@ -56,20 +88,20 @@ namespace ha {
 		}
 
 		minX(r: IRect): number {
-			let x: number = r.vs[0].y;
+			let x: number = r.vs[0].x;
 
 			r.vs.forEach((item: IV2D) => {
-				if (item.y < x) x = item.y
+				if (item.x < x) x = item.x
 			})
 
 			return x;
 		}
 
 		maxX(r: IRect): number {
-			let x: number = r.vs[0].y;
+			let x: number = r.vs[0].x;
 
 			r.vs.forEach((item: IV2D) => {
-				if (item.y > x) x = item.y
+				if (item.x > x) x = item.x
 			})
 
 			return x;

@@ -21,7 +21,8 @@ namespace ha.blitz {
 				handleY: 0,
 				img: null,
 				isAnim: false,
-				rotation: 0
+				rotation: 0,
+				rect: ha.rect.create()
 			}
 
 			return canvas;
