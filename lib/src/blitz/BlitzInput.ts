@@ -11,25 +11,15 @@ const Prompt = (m: string, def: string): string => {
 	return hasil;
 }
 
-const InputHit = (): boolean => {
-	return ha.blitz.input.inputGlobal.isHit; //TODO:
+const InputHit = (): number => {
+	return ha.blitz.input.inputGlobal.hit;
 }
 
 const WaitInput = async (): Promise<void> => {
-
-	return new Promise((resolve, _reject) => {
-		let check = (): void => {
-			if (InputHit()) {
-				resolve();
-			}
-			else {
-				setTimeout(() => {
-					check();
-				}, 0);
-			}
-		}
-		check();
-	});
+	while (true) {
+		if (InputHit() > 0) return;
+		Delay(30);
+	}
 }
 
 const InputX = () => {

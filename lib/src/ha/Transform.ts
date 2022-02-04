@@ -24,6 +24,14 @@ namespace ha {
 		// 	return -h;
 		// }
 
+		create(): ITransform {
+			return {
+				pos: { x: 0, y: 0 },
+				scale: { x: 1, y: 1 },
+				rotation: 0
+			}
+		}
+
 		equal(n1: number, n2: number, tol: number = 1): boolean {
 			if (Math.abs(n1 - n2) <= tol) return true;
 			// console.log("equal failed " + Math.abs(n1 - n2) + "/" + Math.abs(n1) + "/" + Math.abs(n2));
@@ -72,7 +80,7 @@ namespace ha {
 		// 	// console.log('quad x: ' + x + '/y: ' + y);
 		// 	if (x == 0) {
 		// 		if (y >= 0) {
-		// 			return 0;
+		// 			return 0; 
 		// 		}
 		// 		else {
 		// 			return 0;

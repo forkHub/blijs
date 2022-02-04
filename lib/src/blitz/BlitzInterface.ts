@@ -41,7 +41,7 @@ interface IInput {
 	isDrag: boolean;
 	isDown: boolean;
 	isTap: boolean;
-	isHit: boolean;
+	// isHit: boolean;
 	hit: number;
 	key: string;
 	type: string;
@@ -85,4 +85,10 @@ interface IBuffer {
 interface IV2D {
 	x: number,
 	y: number
+}
+
+interface ITransform {
+	pos: IV2D,
+	scale: IV2D,
+	rotation: number
 }

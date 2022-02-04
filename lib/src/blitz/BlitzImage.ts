@@ -6,7 +6,7 @@
  * IMAGE
  */
 
-
+//TODO: test
 const CreateImage = (w: number = 32, h: number = 32, frameW: number = 32, frameH: number = 32): IBuffer => {
 	let canvas: HTMLCanvasElement = document.createElement('canvas') as HTMLCanvasElement;
 	let img: IBuffer;
@@ -33,6 +33,25 @@ const CreateImage = (w: number = 32, h: number = 32, frameW: number = 32, frameH
 	}
 
 	return img;
+}
+
+const CopyImage = (src: IBuffer): IBuffer => {
+	return {
+		canvas: src.canvas,
+		ctx: src.ctx,
+		frameH: src.frameH,
+		frameW: src.frameW,
+		handleX: src.handleX,
+		handleY: src.handleY,
+		height: src.height,
+		img: src.img,
+		isAnim: src.isAnim,
+		rect: ha.rect.copy(src.rect),
+		rotation: src.rotation,
+		scaleX: src.scaleX,
+		scaleY: src.scaleY,
+		width: src.width
+	}
 }
 
 /* TODO [next]:
@@ -81,6 +100,7 @@ const DrawImage = (img: IBuffer, x: number = 0, y: number = 0, frame: number = 0
 
 }
 
+//TODO: test
 const GrabImage = (img: IBuffer, x: number = 0, y: number = 0) => {
 	img.ctx.drawImage(ha.blitz.main.canvasAktif.canvas, x, y, img.width, img.height, 0, 0, img.width, img.height);
 }
@@ -98,12 +118,18 @@ const ImageYHandle = (img: IBuffer): number => { return img.handleY; };
 //TODO:
 const ImageOverlap = () => { };
 
-const ImageCollide = (img1: IBuffer, img2: IBuffer) => {
-	img1;
-	img2;
+const ImageCollide = (img1: IBuffer, x1: number, y1: number, img2: IBuffer, x2: number, y2: number): boolean => {
+	ha.blitz.image.resetImageRect(img1);
+	ha.blitz.image.rectToImageTransform(img1, x1, y1);
+
+	ha.blitz.image.resetImageRect(img2);
+	ha.blitz.image.rectToImageTransform(img2, x2, y2);
+
+	return ha.rect.collide(img1.rect, img2.rect);
 };
 
-const ImageRectOverlap = () => { }
+//
+const ImageBoundtOverlap = () => { }
 
 const MidHandle = (img: IBuffer) => {
 	img.handleX = Math.floor((img.frameW * img.scaleX) / 2);
@@ -238,6 +264,7 @@ const GetPixel = (x: number = 0, y: number = 0): number[] => {
 	return [0, 0, 0];
 }
 
+//TODO: dep
 const SetColor = (r: number = 255, g: number = 255, b: number = 255, a: number = 1) => {
 	Color(r, g, b, a);
 }

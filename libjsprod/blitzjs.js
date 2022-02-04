@@ -112,6 +112,40 @@ var ha;
                     };
                 });
             };
+            resetImageRect(img) {
+                let rect = img.rect;
+                let p;
+                p = rect.vs[0];
+                p.x = 0;
+                p.y = 0;
+                p = rect.vs[1];
+                p.x = img.frameW;
+                p.y = 0;
+                p = rect.vs[2];
+                p.x = img.frameW;
+                p.y = img.frameH;
+                p = rect.vs[3];
+                p.x = 0;
+                p.y = img.frameH;
+            }
+            rectToImageTransform(image, x, y) {
+                let rect = image.rect;
+                let p;
+                let x2 = image.frameW * image.scaleX;
+                let y2 = image.frameH * image.scaleY;
+                p = rect.vs[1];
+                p.x = x2;
+                p.y = 0;
+                p = rect.vs[2];
+                p.x = x2;
+                p.y = y2;
+                p = rect.vs[3];
+                p.x = 0;
+                p.y = y2;
+                ha.rect.translate(rect, x, y);
+                ha.rect.translate(rect, -image.handleX, -image.handleY);
+                ha.rect.rotate(rect, image.rotation, x, y);
+            }
         }
         blitz.image = new Image();
     })(blitz = ha.blitz || (ha.blitz = {}));
@@ -216,7 +250,6 @@ var ha;
                     id: 0,
                     isDown: false,
                     isDrag: false,
-                    isHit: false,
                     isTap: false,
                     key: '',
                     timerEnd: 0,
@@ -235,7 +268,6 @@ var ha;
                 input.id = 0;
                 input.isDown = false;
                 input.isDrag = false;
-                input.isHit = false;
                 input.isTap = false;
                 input.key = '';
                 input.timerEnd = 0;
@@ -267,7 +299,6 @@ var ha;
             flushByInput(input) {
                 input.isDown = false;
                 input.isDrag = false;
-                input.isHit = false;
                 input.isTap = false;
                 input.hit = 0;
             }
@@ -290,7 +321,6 @@ var ha;
                         type: inputType,
                         isDown: false,
                         isDrag: false,
-                        isHit: false,
                         isTap: false,
                         timerEnd: 0,
                         timerStart: 0,
@@ -358,7 +388,6 @@ var ha;
                 input.isDown = true;
                 input.isTap = false;
                 input.isDrag = false;
-                input.isHit = true;
                 input.key = key;
                 input.type = type;
                 input.timerStart = Date.now();
@@ -396,6 +425,24 @@ const CreateImage = (w = 32, h = 32, frameW = 32, frameH = 32) => {
         rect: rect
     };
     return img;
+};
+const CopyImage = (src) => {
+    return {
+        canvas: src.canvas,
+        ctx: src.ctx,
+        frameH: src.frameH,
+        frameW: src.frameW,
+        handleX: src.handleX,
+        handleY: src.handleY,
+        height: src.height,
+        img: src.img,
+        isAnim: src.isAnim,
+        rect: ha.rect.copy(src.rect),
+        rotation: src.rotation,
+        scaleX: src.scaleX,
+        scaleY: src.scaleY,
+        width: src.width
+    };
 };
 const DrawImage = (img, x = 0, y = 0, frame = 0) => {
     let ctx = ha.blitz.main.canvasAktif.ctx;
@@ -440,11 +487,14 @@ const ImageHeight = (img) => { return img.frameH * img.scaleY; };
 const ImageXHandle = (img) => { return img.handleX; };
 const ImageYHandle = (img) => { return img.handleY; };
 const ImageOverlap = () => { };
-const ImageCollide = (img1, img2) => {
-    img1;
-    img2;
+const ImageCollide = (img1, x1, y1, img2, x2, y2) => {
+    ha.blitz.image.resetImageRect(img1);
+    ha.blitz.image.rectToImageTransform(img1, x1, y1);
+    ha.blitz.image.resetImageRect(img2);
+    ha.blitz.image.rectToImageTransform(img2, x2, y2);
+    return ha.rect.collide(img1.rect, img2.rect);
 };
-const ImageRectOverlap = () => { };
+const ImageBoundtOverlap = () => { };
 const MidHandle = (img) => {
     img.handleX = Math.floor((img.frameW * img.scaleX) / 2);
     img.handleY = Math.floor((img.frameH * img.scaleY) / 2);
@@ -566,22 +616,14 @@ const Prompt = (m, def) => {
     return hasil;
 };
 const InputHit = () => {
-    return ha.blitz.input.inputGlobal.isHit;
+    return ha.blitz.input.inputGlobal.hit;
 };
 const WaitInput = async () => {
-    return new Promise((resolve, _reject) => {
-        let check = () => {
-            if (InputHit()) {
-                resolve();
-            }
-            else {
-                setTimeout(() => {
-                    check();
-                }, 0);
-            }
-        };
-        check();
-    });
+    while (true) {
+        if (InputHit() > 0)
+            return;
+        Delay(30);
+    }
 };
 const InputX = () => {
     return ha.blitz.input.inputGlobal.x;
@@ -932,16 +974,6 @@ var ha;
             r.segs.push(ha.segment.createSeg(r.vs[3], r.vs[0]));
             return r;
         }
-        translate(rect, x, y) {
-            rect.segs.forEach((seg) => {
-                ha.segment.translate(seg, x, y);
-            });
-        }
-        rotate(r, deg, xc = 0, yc) {
-            r.vs.forEach((p) => {
-                ha.point.rotateRel(p, xc, yc, deg);
-            });
-        }
         copy(r) {
             return ha.rect.create(r.vs[0].x, r.vs[0].y, r.vs[3].x, r.vs[3].y);
         }
@@ -1009,6 +1041,19 @@ var ha;
                     y = item.y;
             });
             return y;
+        }
+        scale(r) {
+            r;
+        }
+        translate(rect, x, y) {
+            rect.vs.forEach((v) => {
+                ha.point.translate(v, x, y);
+            });
+        }
+        rotate(r, deg, xc = 0, yc) {
+            r.vs.forEach((p) => {
+                ha.point.rotateRel(p, xc, yc, deg);
+            });
         }
     }
     ha.rect = new Rect();
@@ -1134,6 +1179,13 @@ var ha;
         }
         get lastY() {
             return this._lastY;
+        }
+        create() {
+            return {
+                pos: { x: 0, y: 0 },
+                scale: { x: 1, y: 1 },
+                rotation: 0
+            };
         }
         equal(n1, n2, tol = 1) {
             if (Math.abs(n1 - n2) <= tol)

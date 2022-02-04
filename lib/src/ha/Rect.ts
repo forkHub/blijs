@@ -18,21 +18,6 @@ namespace ha {
 			return r;
 		}
 
-		translate(rect: IRect, x: number, y: number): void {
-			rect.segs.forEach((seg: ISegment) => {
-				ha.segment.translate(seg, x, y);
-			})
-		}
-
-		rotate(r: IRect, deg: number, xc: number = 0, yc: number): void {
-
-			r.vs.forEach((p: IV2D) => {
-				ha.point.rotateRel(p, xc, yc, deg);
-			});
-
-
-		}
-
 		copy(r: IRect): IRect {
 			return ha.rect.create(r.vs[0].x, r.vs[0].y, r.vs[3].x, r.vs[3].y);
 		}
@@ -126,6 +111,27 @@ namespace ha {
 
 			return y;
 		}
+
+		scale(r: IRect): void {
+			r;
+		}
+
+		translate(rect: IRect, x: number, y: number): void {
+			rect.vs.forEach((v: IV2D) => {
+				ha.point.translate(v, x, y);
+			})
+		}
+
+		rotate(r: IRect, deg: number, xc: number = 0, yc: number): void {
+
+			r.vs.forEach((p: IV2D) => {
+				ha.point.rotateRel(p, xc, yc, deg);
+			});
+
+
+		}
+
+
 	}
 
 	export var rect: Rect = new Rect();

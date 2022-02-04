@@ -118,7 +118,7 @@ namespace ha.blitz {
 				id: 0,
 				isDown: false,
 				isDrag: false,
-				isHit: false,
+				// isHit: false,
 				isTap: false,
 				key: '',
 				timerEnd: 0,
@@ -138,7 +138,7 @@ namespace ha.blitz {
 			input.id = 0;
 			input.isDown = false;
 			input.isDrag = false;
-			input.isHit = false;
+			// input.isHit = false;
 			input.isTap = false;
 			input.key = '';
 			input.timerEnd = 0;
@@ -173,7 +173,7 @@ namespace ha.blitz {
 		flushByInput(input: IInput): void {
 			input.isDown = false;
 			input.isDrag = false;
-			input.isHit = false;
+			// input.isHit = false;
 			input.isTap = false;
 			input.hit = 0;
 		}
@@ -203,7 +203,7 @@ namespace ha.blitz {
 					// hit: [],
 					isDown: false,
 					isDrag: false,
-					isHit: false,
+					// isHit: false,
 					isTap: false,
 					timerEnd: 0,
 					timerStart: 0,
@@ -289,7 +289,7 @@ namespace ha.blitz {
 			input.isDown = true;
 			input.isTap = false;
 			input.isDrag = false;
-			input.isHit = true;
+			// input.isHit = true;
 			input.key = key;
 			input.type = type;
 			input.timerStart = Date.now();
