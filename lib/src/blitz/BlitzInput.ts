@@ -1,6 +1,5 @@
-///<reference path="../ha/Window.ts"/>
-///<reference path="../ha/Image.ts"/>
-///<reference path="../ha/Input.ts"/>
+///<reference path="../ha/blitz/Window.ts"/>
+///<reference path="../ha/blitz/Image.ts"/>
 
 /*
  * INPUT
@@ -12,7 +11,7 @@ const Prompt = (m: string, def: string): string => {
 }
 
 const InputHit = (): number => {
-	return ha.blitz.input.inputGlobal.hit;
+	return ha.input.inputGlobal.hit;
 }
 
 const WaitInput = async (): Promise<void> => {
@@ -23,51 +22,51 @@ const WaitInput = async (): Promise<void> => {
 }
 
 const InputX = () => {
-	return ha.blitz.input.inputGlobal.x;
+	return ha.input.inputGlobal.x;
 }
 
 const InputY = () => {
-	return ha.blitz.input.inputGlobal.y;
+	return ha.input.inputGlobal.y;
 }
 
 const InputDragX = (): number => {
-	return ha.blitz.input.inputGlobal.yDrag
+	return ha.input.inputGlobal.yDrag
 }
 
 const InputDragY = (): number => {
-	return ha.blitz.input.inputGlobal.xDrag
+	return ha.input.inputGlobal.xDrag
 }
 
 const FlushInput = () => {
-	ha.blitz.input.flush();
+	ha.input.flush();
 }
 
 const InputDown = (): boolean => {
-	return ha.blitz.input.inputGlobal.isDown;
+	return ha.input.inputGlobal.isDown;
 }
 
 const InputDrag = (): boolean => {
-	return ha.blitz.input.inputGlobal.isDrag;
+	return ha.input.inputGlobal.isDrag;
 }
 
 /**
  * 	KEYBOARD
  */
 const FlushKeys = () => {
-	ha.blitz.input.flushByInput(ha.blitz.input.keybGlobal);
-	ha.blitz.input.flushByType('keyb');
+	ha.input.flushByInput(ha.input.keybGlobal);
+	ha.input.flushByType('keyb');
 }
 
 const GetKey = (): string => {
-	return ha.blitz.input.keybGlobal.key;
+	return ha.input.keybGlobal.key;
 }
 
 const KeyIsDown = (key: string = ''): boolean => {
 	if ("" == key) {
-		return ha.blitz.input.keybGlobal.isDown;
+		return ha.input.keybGlobal.isDown;
 	}
 	else {
-		let input: IInput = ha.blitz.input.getInput(key, 'keyb');
+		let input: IInput = ha.input.getInput(key, 'keyb');
 		if (input) {
 			return input.isDown;
 		}
@@ -78,12 +77,12 @@ const KeyIsDown = (key: string = ''): boolean => {
 
 const KeyHit = (key: string = ''): number => {
 	if ("" == key) {
-		let n: number = ha.blitz.input.keybGlobal.hit;
-		ha.blitz.input.keybGlobal.hit = 0;
+		let n: number = ha.input.keybGlobal.hit;
+		ha.input.keybGlobal.hit = 0;
 		return (n);
 	}
 	else {
-		let input: IInput = ha.blitz.input.getInput(key, 'keyb');
+		let input: IInput = ha.input.getInput(key, 'keyb');
 		let n: number = 0;
 
 		if (input) {
@@ -113,7 +112,7 @@ const WaitKey = async (kode: string = ""): Promise<void> => {
 
 //Get Mouse Id of the last pressed mouse
 const GetMouse = (): number => {
-	return parseInt(ha.blitz.input.mouseGlobal.key);
+	return parseInt(ha.input.mouseGlobal.key);
 }
 
 //how many time mouse is hit

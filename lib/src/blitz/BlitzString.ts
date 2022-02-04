@@ -1,3 +1,2 @@
-///<reference path="../ha/Window.ts"/>
-///<reference path="../ha/Image.ts"/>
-///<reference path="../ha/Input.ts"/>
+///<reference path="../ha/blitz/Window.ts"/>
+///<reference path="../ha/blitz/Image.ts"/>

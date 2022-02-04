@@ -1,6 +1,5 @@
-///<reference path="../ha/Window.ts"/>
-///<reference path="../ha/Image.ts"/>
-///<reference path="../ha/Input.ts"/>
+///<reference path="../ha/blitz/Window.ts"/>
+///<reference path="../ha/blitz/Image.ts"/>
 
 /**
  * MAIN
@@ -35,7 +34,7 @@ var blitzConf: IConfig = {
 
 window.onload = () => {
 	ha.blitz.main.canvasInit();
-	ha.blitz.input.init(ha.blitz.main.canvasAktif.canvas);
+	ha.input.init(ha.blitz.main.canvasAktif);
 
 	// const BLCanvas: HTMLCanvasElement = ha.blitz.main.canvasAktif.canvas;
 
