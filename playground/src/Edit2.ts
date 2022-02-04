@@ -85,7 +85,8 @@ class Edit2 {
 		}, 10);
 
 		// console.log
-		console.log(this.myCodeMirror.getValue());
+		// console.log(this.myCodeMirror.getValue());
+		console.log(hal2);
 	}
 
 
@@ -154,7 +155,7 @@ let hal: string = `
 		<canvas class='buffer front-buffer'></canvas>
 		<div class='debug' style="z-index:1; position:relative"></div>
 
-		<script src="./js/blitzjs.js"></script>
+		<script src="./js/blitzjs.js?r=${Math.floor(Math.random() * 1000)}"></script>
 		<script>{{script}}</script>
 	</body>
 
