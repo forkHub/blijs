@@ -6,5 +6,6 @@ copy demo\tile\web\js\Tile.js playground\web\datajs\Tile.js
 copy demo\collision\web\js\Collision.js playground\web\datajs\Collision.js
 
 copy libjsprod\*.js playground\web\js
+copy ..\halib\web\libjs\*.* playground\web\js
 
 pause

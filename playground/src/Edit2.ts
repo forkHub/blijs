@@ -49,20 +49,35 @@ class Edit2 {
 			console.log('change');
 		});
 
-		//loading
-		let s: string = window.top.location.search.slice(1);
-		let ar: string[] = s.split('=');
+		this.loadFromQuery();
+	}
 
-		console.log('loading: ' + ha.comp.loading);
-		ha.comp.Util.Ajax2('get', "./datajs/" + ar[1] + ".js", '').then((value: string) => {
-			this.myCodeMirror.setValue(value);
-			// this.compile();
-		}).catch((e) => {
+	loadFromQuery(): void {
+		try {
+			//loading
+			let s: string = window.top.location.search.slice(1);
+			console.log('url: ' + s);
+			let ar: string[] = s.split('&');
+			console.log(ar);
+			ar = ar[0].split('=');
+			console.log(ar);
+
+			console.log('loading: ' + ha.comp.loading);
+			ha.comp.Util.Ajax2('get', "./datajs/" + ar[1] + ".js", '').then((value: string) => {
+				this.myCodeMirror.setValue(value);
+				// this.compile();
+			}).catch((e) => {
+				console.error(e);
+				ha.comp.dialog.tampil('Colud not load data');
+			});
+
+			//load query
+			console.log(ar);
+
+		}
+		catch (e) {
 			console.error(e);
-		});
-
-		//load query
-		console.log(ar);
+		}
 	}
 
 	klikRun(): void {
@@ -124,7 +139,7 @@ let hal: string = `
 				position: relative;
 				width: 100%;
 				height: 100%;
-				background-color: #111;
+				background-color: #000;
 			}
 
 			canvas.buffer.back-buffer,
@@ -155,6 +170,7 @@ let hal: string = `
 		<canvas class='buffer front-buffer'></canvas>
 		<div class='debug' style="z-index:1; position:relative"></div>
 
+		<script src="./js/halib.js?r=${Math.floor(Math.random() * 1000)}"></script>
 		<script src="./js/blitzjs.js?r=${Math.floor(Math.random() * 1000)}"></script>
 		<script>{{script}}</script>
 	</body>
