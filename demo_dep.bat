@@ -8,6 +8,7 @@ copy ..\halib\web\libjs\*.d.ts .\demo\rot\dts\
 copy ..\halib\web\libjs\*.d.ts .\demo\expl\dts\
 copy ..\halib\web\libjs\*.d.ts .\demo\doodle\dts\
 copy ..\halib\web\libjs\*.d.ts .\demo\drag\dts\
+copy ..\halib\web\libjs\*.d.ts .\demo\drag_multiple\dts\
 
 echo .
 echo copy halib.js dari halib ke demo:
@@ -19,6 +20,7 @@ copy ..\halib\web\libjs\*.js .\demo\rot\web\js\
 copy ..\halib\web\libjs\*.js .\demo\expl\web\js\
 copy ..\halib\web\libjs\*.js .\demo\doodle\web\js\
 copy ..\halib\web\libjs\*.js .\demo\drag\web\js\
+copy ..\halib\web\libjs\*.js .\demo\drag_multiple\js\
 
 echo .
 echo copy dts dari blijs ke demo:
@@ -30,6 +32,7 @@ copy libjsprod\*.d.ts .\demo\rot\dts\
 copy libjsprod\*.d.ts .\demo\expl\dts\
 copy libjsprod\*.d.ts .\demo\doodle\dts\
 copy libjsprod\*.d.ts .\demo\drag\dts\
+copy libjsprod\*.d.ts .\demo\drag_multiple\dts\
 
 echo .
 echo copy js dari blijs ke demo:
@@ -41,5 +44,6 @@ copy libjsprod\*.js .\demo\rot\web\js\
 copy libjsprod\*.js .\demo\expl\web\js\
 copy libjsprod\*.js .\demo\doodle\web\js\
 copy libjsprod\*.js .\demo\drag\web\js\
+copy libjsprod\*.js .\demo\drag_multiple\web\js\
 
 pause
