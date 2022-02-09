@@ -128,8 +128,17 @@ const ImageCollide = (img1: IBuffer, x1: number, y1: number, img2: IBuffer, x2: 
 	return ha.rect.collide(img1.rect, img2.rect);
 };
 
+const ImageDotCollide = (img1: IBuffer, x1: number, y1: number, x2: number, y2: number): boolean => {
+	ha.blitz.image.resetImageRect(img1);
+	ha.blitz.image.rectToImageTransform(img1, x1, y1);
+
+	return ha.rect.collideDot(img1.rect, x2, y2);
+};
+
 //
-const ImageBoundtOverlap = () => { }
+const ImageBoundtOverlap = (): boolean => {
+	return false; //TODO:
+}
 
 const MidHandle = (img: IBuffer) => {
 	img.handleX = Math.floor((img.frameW * img.scaleX) / 2);

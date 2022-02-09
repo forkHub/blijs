@@ -11,7 +11,10 @@ const Prompt = (m: string, def: string): string => {
 }
 
 const InputHit = (): number => {
-	return ha.input.inputGlobal.hit;
+	let hit: number = ha.input.inputGlobal.hit;
+	ha.input.inputGlobal.hit = 0;
+
+	return hit;
 }
 
 const WaitInput = async (): Promise<void> => {
@@ -30,11 +33,11 @@ const InputY = () => {
 }
 
 const InputDragX = (): number => {
-	return ha.input.inputGlobal.yDrag
+	return ha.input.inputGlobal.xDrag
 }
 
 const InputDragY = (): number => {
-	return ha.input.inputGlobal.xDrag
+	return ha.input.inputGlobal.yDrag
 }
 
 const FlushInput = () => {

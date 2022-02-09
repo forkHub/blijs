@@ -1,2 +1,2 @@
-copy ..\halib\web\libjs\halib.d.ts .\src
+copy ..\halib\web\libjs\halib.d.ts .\lib\src
 pause
