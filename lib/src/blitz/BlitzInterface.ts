@@ -55,15 +55,6 @@ interface IInputData {
 	key?: string;	//kode keyb, tombol mouse 
 }
 
-// interface ICanvas {
-// 	canvas: HTMLCanvasElement;
-// 	ctx: CanvasRenderingContext2D;
-// 	width: number,
-// 	height: number,
-// 	scaleX: number,
-// 	scaleY: number
-// }
-
 interface IBuffer {
 	img: HTMLImageElement;
 	width: number;

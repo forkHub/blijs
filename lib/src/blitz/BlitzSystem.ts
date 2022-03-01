@@ -1,39 +1,6 @@
 ///<reference path="../ha/blitz/Window.ts"/>
 ///<reference path="../ha/blitz/Image.ts"/>
 
-// const CreateTimer = (t: number): ITimer => {
-// 	return {
-// 		endTime: Date.now() + t,
-// 		startTime: Date.now(),
-// 		aktif: true,
-// 		time: t
-// 	}
-// }
-
-// const FreeTimer = (t: ITimer) => {
-// 	t.aktif = false;
-// }
-
-// const WaitTimer = async (t: ITimer): Promise<number> => {
-// 	return new Promise((resolve, _reject) => {
-// 		let check = (): void => {
-// 			if (Date.now() > t.endTime) {
-// 				let nLewat: number = (Date.now() - t.startTime) / t.time;
-
-// 				t.startTime = Date.now();
-// 				t.endTime = Date.now() + t.time;
-// 				resolve(nLewat);
-// 			}
-// 			else {
-// 				setTimeout(() => {
-// 					check();
-// 				}, 0);
-// 			}
-// 		}
-// 		check();
-// 	});
-// }
-
 const Delay = async (m: number = 0): Promise<void> => {
 	return new Promise((resolve, _reject) => {
 		setTimeout(() => {

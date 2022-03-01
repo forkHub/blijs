@@ -136,7 +136,7 @@ const ImageDotCollide = (img1: IBuffer, x1: number, y1: number, x2: number, y2: 
 };
 
 //
-const ImageBoundtOverlap = (): boolean => {
+const ImageBoundOverlap = (): boolean => {
 	return false; //TODO:
 }
 
@@ -292,8 +292,8 @@ const CreateLayer = () => { }
 const LayerZ = () => { }
 
 
-//dep
-// const TFormImage = () => { }
+//ignored
+//const TFormImage = () => { }
 //const FeeImage = () => { }
 //const DrawImageRect = () => { }
 //const ImageBuffer = () => { }

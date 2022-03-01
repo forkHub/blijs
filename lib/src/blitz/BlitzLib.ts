@@ -5,6 +5,8 @@
  * 	GRAPHICS
  */
 
+//TODO: dipindahin ke tempat yang bener
+
 const Cls = (r: number = 0, g: number = 0, b: number = 0, alpha: number = 1): void => {
 	let ctx: CanvasRenderingContext2D = ha.blitz.main.canvasAktif.ctx;
 	ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
