@@ -171,7 +171,7 @@ let hal: string = `
 		<div class='debug' style="z-index:1; position:relative"></div>
 
 		<script src="./js/halib.js?r=${Math.floor(Math.random() * 1000)}"></script>
-		<script src="./js/blitzjs.js?r=${Math.floor(Math.random() * 1000)}"></script>
+		<script src="./js/blijs.js?r=${Math.floor(Math.random() * 1000)}"></script>
 		<script>{{script}}</script>
 	</body>
 

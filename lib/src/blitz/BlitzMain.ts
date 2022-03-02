@@ -5,7 +5,7 @@
  * MAIN
  */
 
-
+//TODO: diubah, di handle oleh yang panggil
 window.onload = () => {
 	ha.blitz.main.canvasInit();
 	ha.input.init(ha.blitz.main.canvasAktif);
@@ -29,7 +29,7 @@ window.onload = () => {
 				})
 		}
 		else {
-			console.debug('start not found');
+			console.warn('start not found');
 			ha.blitz.main.repeat();
 		}
 	}, 0);
