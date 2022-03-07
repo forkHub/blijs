@@ -1,0 +1,16 @@
+ref:
+====
+
+documentation:
+==============
+dim
+
+feature:
+========
+skew
+
+demo:
+=====
+isometric series
+path finder series
+wolfenstein series
