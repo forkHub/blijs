@@ -11,7 +11,7 @@ copy ..\halib\web\libjs\*.d.ts .\demo\drag\dts\
 copy ..\halib\web\libjs\*.d.ts .\demo\drag_multiple\dts\
 
 echo .
-echo copy halib.js dari halib ke demo:
+echo copy js dari halib ke demo:
 echo =================================
 copy ..\halib\web\libjs\*.js .\demo\collision\web\js\
 copy ..\halib\web\libjs\*.js .\demo\tile\web\js\
@@ -23,27 +23,27 @@ copy ..\halib\web\libjs\*.js .\demo\drag\web\js\
 copy ..\halib\web\libjs\*.js .\demo\drag_multiple\js\
 
 echo .
-echo copy dts dari blijs ke demo:
+echo copy dts dari js ke demo:
 echo ============================
-copy libjsprod\*.d.ts .\demo\collision\dts\
-copy libjsprod\*.d.ts .\demo\tile\dts\
-copy libjsprod\*.d.ts .\demo\snow\dts\
-copy libjsprod\*.d.ts .\demo\rot\dts\
-copy libjsprod\*.d.ts .\demo\expl\dts\
-copy libjsprod\*.d.ts .\demo\doodle\dts\
-copy libjsprod\*.d.ts .\demo\drag\dts\
-copy libjsprod\*.d.ts .\demo\drag_multiple\dts\
+copy js\*.d.ts .\demo\collision\dts\
+copy js\*.d.ts .\demo\tile\dts\
+copy js\*.d.ts .\demo\snow\dts\
+copy js\*.d.ts .\demo\rot\dts\
+copy js\*.d.ts .\demo\expl\dts\
+copy js\*.d.ts .\demo\doodle\dts\
+copy js\*.d.ts .\demo\drag\dts\
+copy js\*.d.ts .\demo\drag_multiple\dts\
 
 echo .
-echo copy js dari blijs ke demo:
+echo copy js dari js ke demo:
 echo =================================
-copy libjsprod\*.js .\demo\collision\web\js\
-copy libjsprod\*.js .\demo\tile\web\js\
-copy libjsprod\*.js .\demo\snow\web\js\
-copy libjsprod\*.js .\demo\rot\web\js\
-copy libjsprod\*.js .\demo\expl\web\js\
-copy libjsprod\*.js .\demo\doodle\web\js\
-copy libjsprod\*.js .\demo\drag\web\js\
-copy libjsprod\*.js .\demo\drag_multiple\web\js\
+copy js\*.js .\demo\collision\web\js\
+copy js\*.js .\demo\tile\web\js\
+copy js\*.js .\demo\snow\web\js\
+copy js\*.js .\demo\rot\web\js\
+copy js\*.js .\demo\expl\web\js\
+copy js\*.js .\demo\doodle\web\js\
+copy js\*.js .\demo\drag\web\js\
+copy js\*.js .\demo\drag_multiple\web\js\
 
 pause

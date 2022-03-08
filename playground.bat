@@ -7,7 +7,7 @@ copy demo\collision\web\js\Collision.js playground\web\datajs\Collision.js
 copy demo\drag\web\js\Drag.js playground\web\datajs\Drag.js
 copy demo\drag_multiple\web\js\Drag_Multiple.js playground\web\datajs\Drag_Multiple.js
 
-copy libjsprod\*.js playground\web\js
+copy js\*.js playground\web\js
 copy ..\halib\web\libjs\*.* playground\web\js
 
 pause
