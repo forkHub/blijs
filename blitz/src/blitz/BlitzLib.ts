@@ -1,4 +1,4 @@
-///<reference path="../ha/blitz/Window.ts"/>
+///<reference path="../ha/blitz/Main.ts"/>
 ///<reference path="../ha/blitz/Image.ts"/>
 
 /*
@@ -35,6 +35,7 @@ const FrontBuffer = () => { }
 
 const GetColor = () => { }
 
+//TODO: harus di check ulang
 const Graphics = (width: number = 320, height: number = 240, gl: boolean = true, pixel: boolean = true): void => {
 	let canvas = ha.blitz.main.canvasAktif;
 

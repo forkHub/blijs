@@ -6,6 +6,7 @@ namespace ha.blitz {
 		private _canvasAr: IBuffer[] = [];
 		private _canvasAktif: IBuffer;
 
+		//TODO: dibuat dynamic canvas
 		buatCanvas(buffer: string): IBuffer {
 			let canvasEl: HTMLCanvasElement = window.document.body.querySelector(`canvas.${buffer}`);
 			let canvas: IBuffer = {
@@ -28,6 +29,7 @@ namespace ha.blitz {
 			return canvas;
 		}
 
+		//TODO:
 		canvasInit(): void {
 			let canvas: IBuffer = this.buatCanvas('back-buffer');
 			this._canvasAr.push(canvas);
@@ -38,6 +40,7 @@ namespace ha.blitz {
 			ha.blitz.main.canvasAktif = canvas;
 		}
 
+		//TODO: masuk blijs dihapus flow
 		windowResize = (): void => {
 			// console.debug('window on resize');
 			let canvas: HTMLCanvasElement = ha.blitz.main._canvasAktif.canvas;
@@ -65,6 +68,7 @@ namespace ha.blitz {
 			// console.debug('canvas w: ' + canvas.style.width + '/ratio: ' + ratio);
 		}
 
+		//TODO: dihapus diambil oleh blijs
 		loop = async (): Promise<void> => {
 			let _window: any = window;
 			if (typeof _window.Loop == 'function') {
@@ -72,6 +76,7 @@ namespace ha.blitz {
 			}
 		}
 
+		//TODO: dihapus diambil oleh blijs
 		repeat = () => {
 			this.loop()
 				.then(() => {
