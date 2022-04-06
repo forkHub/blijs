@@ -16,7 +16,7 @@ const FPS = (n: number) => {
 	}
 }
 
-//TODO: masukin ke lib, kepanjangen
+//TODO: kemungkinan diganti buat nyesuain sama blitz
 const Dim = (...args: any[]): any[] => {
 
 	if (0 == args.length) {

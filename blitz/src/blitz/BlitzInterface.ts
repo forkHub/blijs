@@ -3,11 +3,6 @@
  * INTERFACE 
 */
 
-//TODO: dihapus
-interface IConfig {
-	input: IInput;
-}
-
 interface ILine {
 	y: number,
 	m: number,

@@ -6,9 +6,8 @@ namespace ha.blitz {
 		private _canvasAr: IBuffer[] = [];
 		private _canvasAktif: IBuffer;
 
-		//TODO: dibuat dynamic canvas
-		buatCanvas(buffer: string): IBuffer {
-			let canvasEl: HTMLCanvasElement = window.document.body.querySelector(`canvas.${buffer}`);
+		buatCanvas(canvasEl: HTMLCanvasElement): IBuffer {
+			// let canvasEl: HTMLCanvasElement = window.document.body.querySelector(`canvas.${buffer}`);
 			let canvas: IBuffer = {
 				canvas: canvasEl,
 				ctx: canvasEl.getContext('2d'),
@@ -29,64 +28,14 @@ namespace ha.blitz {
 			return canvas;
 		}
 
-		//TODO:
-		canvasInit(): void {
-			let canvas: IBuffer = this.buatCanvas('back-buffer');
+		init(canvasBelakang: HTMLCanvasElement, canvasDepan: HTMLCanvasElement): void {
+			let canvas: IBuffer = this.buatCanvas(canvasBelakang);
 			this._canvasAr.push(canvas);
 
-			canvas = this.buatCanvas('front-buffer');
+			canvas = this.buatCanvas(canvasDepan);
 			this._canvasAr.push(canvas);
 
 			ha.blitz.main.canvasAktif = canvas;
-		}
-
-		//TODO: masuk blijs dihapus flow
-		windowResize = (): void => {
-			// console.debug('window on resize');
-			let canvas: HTMLCanvasElement = ha.blitz.main._canvasAktif.canvas;
-
-			let cp = ha.blitz.main._canvasAktif.canvas.width;
-			let cl = ha.blitz.main._canvasAktif.canvas.height;
-
-			let wp = window.innerWidth;
-			let wl = window.innerHeight;
-
-			let ratio = Math.min((wp / cp), (wl / cl));
-
-			let cp2 = Math.floor(cp * ratio);
-			let cl2 = Math.floor(cl * ratio);
-
-			ha.blitz.main._canvasAktif.scaleX = ratio;
-			ha.blitz.main._canvasAktif.scaleY = ratio;
-
-			canvas.style.width = cp2 + 'px';
-			canvas.style.height = cl2 + 'px';
-
-			canvas.style.top = ((wl - cl2) / 2) + 'px';
-			canvas.style.left = ((wp - cp2) / 2) + 'px';
-
-			// console.debug('canvas w: ' + canvas.style.width + '/ratio: ' + ratio);
-		}
-
-		//TODO: dihapus diambil oleh blijs
-		loop = async (): Promise<void> => {
-			let _window: any = window;
-			if (typeof _window.Loop == 'function') {
-				await _window.Loop();
-			}
-		}
-
-		//TODO: dihapus diambil oleh blijs
-		repeat = () => {
-			this.loop()
-				.then(() => {
-					setTimeout(() => {
-						requestAnimationFrame(this.repeat);
-					}, ha.blitz.main._fps);
-				}).
-				catch((e) => {
-					console.error(e);
-				});
 		}
 
 		public get canvasAktif(): IBuffer {

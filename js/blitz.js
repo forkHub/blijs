@@ -7,8 +7,7 @@ var ha;
             _origin;
             _canvasAr = [];
             _canvasAktif;
-            buatCanvas(buffer) {
-                let canvasEl = window.document.body.querySelector(`canvas.${buffer}`);
+            buatCanvas(canvasEl) {
                 let canvas = {
                     canvas: canvasEl,
                     ctx: canvasEl.getContext('2d'),
@@ -27,46 +26,13 @@ var ha;
                 };
                 return canvas;
             }
-            canvasInit() {
-                let canvas = this.buatCanvas('back-buffer');
+            init(canvasBelakang, canvasDepan) {
+                let canvas = this.buatCanvas(canvasBelakang);
                 this._canvasAr.push(canvas);
-                canvas = this.buatCanvas('front-buffer');
+                canvas = this.buatCanvas(canvasDepan);
                 this._canvasAr.push(canvas);
                 ha.blitz.main.canvasAktif = canvas;
             }
-            windowResize = () => {
-                let canvas = ha.blitz.main._canvasAktif.canvas;
-                let cp = ha.blitz.main._canvasAktif.canvas.width;
-                let cl = ha.blitz.main._canvasAktif.canvas.height;
-                let wp = window.innerWidth;
-                let wl = window.innerHeight;
-                let ratio = Math.min((wp / cp), (wl / cl));
-                let cp2 = Math.floor(cp * ratio);
-                let cl2 = Math.floor(cl * ratio);
-                ha.blitz.main._canvasAktif.scaleX = ratio;
-                ha.blitz.main._canvasAktif.scaleY = ratio;
-                canvas.style.width = cp2 + 'px';
-                canvas.style.height = cl2 + 'px';
-                canvas.style.top = ((wl - cl2) / 2) + 'px';
-                canvas.style.left = ((wp - cp2) / 2) + 'px';
-            };
-            loop = async () => {
-                let _window = window;
-                if (typeof _window.Loop == 'function') {
-                    await _window.Loop();
-                }
-            };
-            repeat = () => {
-                this.loop()
-                    .then(() => {
-                    setTimeout(() => {
-                        requestAnimationFrame(this.repeat);
-                    }, ha.blitz.main._fps);
-                }).
-                    catch((e) => {
-                    console.error(e);
-                });
-            };
             get canvasAktif() {
                 return this._canvasAktif;
             }
@@ -498,8 +464,6 @@ const Graphics = (width = 320, height = 240, gl = true, pixel = true) => {
     let canvas = ha.blitz.main.canvasAktif;
     canvas.canvas.width = width;
     canvas.canvas.height = height;
-    canvas.canvas.style.width = 320 + 'px';
-    canvas.canvas.style.height = 240 + 'px';
     canvas.width = width;
     canvas.height = height;
     if (gl) {
@@ -511,7 +475,6 @@ const Graphics = (width = 320, height = 240, gl = true, pixel = true) => {
     if (pixel) {
         ha.blitz.main.canvasAktif.canvas.classList.add('pixel');
     }
-    ha.blitz.main.windowResize();
 };
 const GraphicsBuffer = () => { };
 const Line = (x1, y1, x2, y2) => {

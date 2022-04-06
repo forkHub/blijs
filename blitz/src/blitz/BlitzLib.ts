@@ -35,14 +35,11 @@ const FrontBuffer = () => { }
 
 const GetColor = () => { }
 
-//TODO: harus di check ulang
 const Graphics = (width: number = 320, height: number = 240, gl: boolean = true, pixel: boolean = true): void => {
-	let canvas = ha.blitz.main.canvasAktif;
+	let canvas: IBuffer = ha.blitz.main.canvasAktif;
 
 	canvas.canvas.width = width;
 	canvas.canvas.height = height;
-	canvas.canvas.style.width = 320 + 'px';
-	canvas.canvas.style.height = 240 + 'px';
 	canvas.width = width;
 	canvas.height = height;
 
@@ -57,7 +54,7 @@ const Graphics = (width: number = 320, height: number = 240, gl: boolean = true,
 		ha.blitz.main.canvasAktif.canvas.classList.add('pixel');
 	}
 
-	ha.blitz.main.windowResize();
+	// ha.blitz.main.windowResize();
 }
 
 const GraphicsBuffer = () => { }

@@ -1,19 +1,18 @@
-
 /**
  * Wrapper
  */
 
 namespace ha.blijs {
 	class Blijs {
-		init() {
-			ha.blitz.main.canvasInit();
+		init(canvas: HTMLCanvasElement) {
+			ha.blitz.main.init(canvas, canvas);
 			ha.input.init(ha.blitz.main.canvasAktif);
 
 			window.onresize = async (): Promise<void> => {
-				ha.blitz.main.windowResize();
+				this.windowResize();
 			}
 
-			ha.blitz.main.windowResize();
+			this.windowResize();
 
 			let _window: any = window;
 
@@ -21,7 +20,7 @@ namespace ha.blijs {
 				if (typeof _window.Start == "function") {
 					_window.Start()
 						.then(() => {
-							ha.blitz.main.repeat();
+							this.repeat();
 						})
 						.catch((e: Error) => {
 							console.error(e);
@@ -29,7 +28,7 @@ namespace ha.blijs {
 				}
 				else {
 					console.warn('start not found');
-					ha.blitz.main.repeat();
+					this.repeat();
 				}
 			}, 0);
 		}
@@ -84,17 +83,15 @@ namespace ha.blijs {
 	export var blijs: Blijs = new Blijs();
 }
 
-//TODO: diubah, di handle oleh yang panggil
 window.onload = () => {
-	ha.blitz.main.canvasInit();
-	ha.input.init(ha.blitz.main.canvasAktif);
+	let canvas: HTMLCanvasElement = document.body.querySelector('canvas') as HTMLCanvasElement;
+	ha.blijs.blijs.init(canvas)
 
 	window.onresize = async (): Promise<void> => {
-		// ha.blitz.main.windowResize();
 		ha.blijs.blijs.windowResize();
 	}
 
-	ha.blitz.main.windowResize();
+	ha.blijs.blijs.windowResize();
 
 	let _window: any = window;
 
@@ -102,7 +99,7 @@ window.onload = () => {
 		if (typeof _window.Start == "function") {
 			_window.Start()
 				.then(() => {
-					ha.blitz.main.repeat();
+					ha.blijs.blijs.repeat();
 				})
 				.catch((e: Error) => {
 					console.error(e);
@@ -110,7 +107,7 @@ window.onload = () => {
 		}
 		else {
 			console.warn('start not found');
-			ha.blitz.main.repeat();
+			ha.blijs.blijs.repeat();
 		}
 	}, 0);
 }
